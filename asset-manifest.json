@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/BattleOfR/static/css/main.859c4de1.css",
-    "main.js": "/BattleOfR/static/js/main.2ac076c4.js",
+    "main.css": "/BattleOfR/static/css/main.57a92f80.css",
+    "main.js": "/BattleOfR/static/js/main.1b8300c8.js",
     "static/js/453.2fd4d4a3.chunk.js": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js",
+    "static/media/background.png": "/BattleOfR/static/media/background.c863667de79f7d106656.png",
+    "static/media/logo.png": "/BattleOfR/static/media/logo.aed0a9e4e9025b3aba26.png",
     "index.html": "/BattleOfR/index.html",
-    "main.859c4de1.css.map": "/BattleOfR/static/css/main.859c4de1.css.map",
-    "main.2ac076c4.js.map": "/BattleOfR/static/js/main.2ac076c4.js.map",
+    "main.57a92f80.css.map": "/BattleOfR/static/css/main.57a92f80.css.map",
+    "main.1b8300c8.js.map": "/BattleOfR/static/js/main.1b8300c8.js.map",
     "453.2fd4d4a3.chunk.js.map": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.859c4de1.css",
-    "static/js/main.2ac076c4.js"
+    "static/css/main.57a92f80.css",
+    "static/js/main.1b8300c8.js"
   ]
 }
