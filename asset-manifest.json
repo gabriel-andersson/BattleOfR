@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/pentathlon-app/static/css/main.859c4de1.css",
+    "main.js": "/pentathlon-app/static/js/main.8e3aa55e.js",
+    "static/js/453.2f1c2d2d.chunk.js": "/pentathlon-app/static/js/453.2f1c2d2d.chunk.js",
+    "index.html": "/pentathlon-app/index.html",
+    "main.859c4de1.css.map": "/pentathlon-app/static/css/main.859c4de1.css.map",
+    "main.8e3aa55e.js.map": "/pentathlon-app/static/js/main.8e3aa55e.js.map",
+    "453.2f1c2d2d.chunk.js.map": "/pentathlon-app/static/js/453.2f1c2d2d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.859c4de1.css",
+    "static/js/main.8e3aa55e.js"
+  ]
+}
