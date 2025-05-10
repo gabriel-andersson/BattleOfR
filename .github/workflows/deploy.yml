@@ -5,10 +5,7 @@ on:
     branches:
       - main
       - master
-  pull_request:
-    branches:
-      - main
-      - master
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -17,8 +14,8 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
-    name: Deploy to GitHub Pages
+  build-and-deploy:
+    name: Build and Deploy to GitHub Pages
     runs-on: ubuntu-latest
     
     steps:
@@ -36,17 +33,19 @@ jobs:
         
       - name: Build website
         run: npm run build
-      
+        env:
+          CI: false
+          PUBLIC_URL: /pentathlon-app
+          
+      - name: Copy 404.html
+        run: cp public/404.html build/404.html
+        
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
         
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-          enable_jekyll: false
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy to GitHub Pages' 
+          folder: build
+          branch: gh-pages
+          clean: true 
