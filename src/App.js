@@ -434,7 +434,7 @@ const Results = ({ participants, updateScore }) => {
 const App = () => {
   const [activeSection, setActiveSection] = useState('schedule');
   const [participants, setParticipants] = useState([]);
-  const [_smallScreen, setSmallScreen] = useState(isSmallScreen());
+  const [ setSmallScreen] = useState(isSmallScreen());
   
   // Handle screen resize
   useEffect(() => {
