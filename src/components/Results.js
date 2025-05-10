@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from '../styles/styles';
 
-const Results = ({ participants, updateScore }) => {
+const Results = ({ participants, updateScore, loading }) => {
   const [participantName, setParticipantName] = useState('');
   const [points, setPoints] = useState('');
   const events = ['Event 1: Swimming', 'Event 2: Running', 'Event 3: Cycling'];
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (loading) {
+      alert('Please wait until data is loaded');
+      return;
+    }
+
     const participant = participants.find(p => p.name.toLowerCase() === participantName.toLowerCase());
     const pointsToAdd = parseInt(points, 10);
 
@@ -25,12 +31,32 @@ const Results = ({ participants, updateScore }) => {
       return;
     }
 
-    // Pass participantId, points, and optionally the event name
-    updateScore(participant.id, pointsToAdd, selectedEvent);
-    setParticipantName('');
-    setPoints('');
-    // Optionally reset selectedEvent or provide feedback
+    try {
+      setSubmitting(true);
+      // Pass participantId, points, and optionally the event name
+      await updateScore(participant.id, pointsToAdd, selectedEvent);
+      setParticipantName('');
+      setPoints('');
+      // Optionally reset selectedEvent or provide feedback
+    } catch (error) {
+      console.error("Error submitting score:", error);
+      alert('Error submitting score. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.section}> 
+        <Text style={styles.sectionTitle}>Register Results</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Loading participants...</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.section}> 
@@ -44,6 +70,7 @@ const Results = ({ participants, updateScore }) => {
             onChangeText={setParticipantName}
             placeholder="Enter participant's full name"
             placeholderTextColor="#5D4037aa" // More visible placeholder
+            editable={!submitting}
           />
         </View>
         
@@ -55,14 +82,17 @@ const Results = ({ participants, updateScore }) => {
                 key={event} 
                 style={[
                   styles.pickerButton,
-                  selectedEvent === event && styles.pickerButtonActive
+                  selectedEvent === event && styles.pickerButtonActive,
+                  submitting && styles.disabledButton
                 ]}
-                onPress={() => setSelectedEvent(event)}
-                activeOpacity={0.7} // Add touch feedback
+                onPress={() => !submitting && setSelectedEvent(event)}
+                activeOpacity={submitting ? 1 : 0.7} // Add touch feedback
+                disabled={submitting}
               >
                 <Text style={[
                   styles.pickerButtonText,
-                  selectedEvent === event && styles.pickerButtonTextActive
+                  selectedEvent === event && styles.pickerButtonTextActive,
+                  submitting && styles.disabledText
                 ]}>
                   {event}
                 </Text>
@@ -80,14 +110,20 @@ const Results = ({ participants, updateScore }) => {
             placeholder="Enter points"
             placeholderTextColor="#5D4037aa" // More visible placeholder
             keyboardType="number-pad"
+            editable={!submitting}
           />
         </View>
         <TouchableOpacity 
-          style={styles.submitBtn} 
+          style={[styles.submitBtn, submitting && styles.disabledButton]} 
           onPress={handleSubmit}
-          activeOpacity={0.7} // Add touch feedback
+          activeOpacity={submitting ? 1 : 0.7} // Add touch feedback
+          disabled={submitting}
         >
-          <Text style={styles.submitBtnText}>Submit Score</Text>
+          {submitting ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.submitBtnText}>Submit Score</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

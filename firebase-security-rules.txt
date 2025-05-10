@@ -1,0 +1,37 @@
+// Copy these rules to your Firebase Firestore Security Rules in the Firebase Console.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to all participants data
+    match /participants/{participant} {
+      allow read: if true;
+      // Allow write only for admin users, you'll need to implement Firebase Authentication for this
+      // For now, anyone can write to the participants collection
+      // IMPORTANT: In production, restrict this to authenticated users!
+      allow write: if true;
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/* 
+  RECOMMENDATIONS FOR PRODUCTION:
+  
+  1. Implement Firebase Authentication for user management
+  2. Create admin users who can update scores and manage participants
+  3. Update security rules to restrict write access:
+  
+  match /participants/{participant} {
+    allow read: if true;
+    allow create: if request.auth != null; // Anyone authenticated can register
+    allow update, delete: if request.auth != null && isAdmin(); // Only admins can update scores
+  }
+  
+  function isAdmin() {
+    return request.auth.token.admin == true;
+  }
+*/ 

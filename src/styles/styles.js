@@ -240,6 +240,88 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  disabledButton: {
+    backgroundColor: '#A0522D88',
+    opacity: 0.7,
+  },
+  disabledText: {
+    opacity: 0.7,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#F5F5DC',
+  },
+  loadingSubtext: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#F5F5DC88',
+    fontStyle: 'italic',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#5D403788',
+    borderRadius: 5,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#FF6B6B',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  errorSubtext: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#F5F5DC',
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
+  errorBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    backgroundColor: '#B71C1C',
+    marginBottom: 10,
+  },
+  errorBannerText: {
+    flex: 1,
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  resetButton: {
+    backgroundColor: '#5D4037',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    marginLeft: 10,
+    minWidth: 120,
+    alignItems: 'center',
+  },
+  resetButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  emptyStateContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#F5F5DC',
+    fontStyle: 'italic',
+  },
   // Leaderboard styles
   leaderboardContainer: {
     borderRadius: 4,

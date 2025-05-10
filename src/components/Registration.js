@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from '../styles/styles';
 
 const Registration = ({ addParticipant }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [team, setTeam] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name && email && team) {
-      addParticipant({ name, email, team });
-      setName('');
-      setEmail('');
-      setTeam('');
-      alert('Registration successful!');
+      try {
+        setSubmitting(true);
+        await addParticipant({ name, email, team });
+        setName('');
+        setEmail('');
+        setTeam('');
+        alert('Registration successful!');
+      } catch (error) {
+        console.error("Error registering participant:", error);
+        alert('Registration failed. Please try again.');
+      } finally {
+        setSubmitting(false);
+      }
     } else {
       alert('Please fill in all fields');
     }
@@ -31,6 +40,7 @@ const Registration = ({ addParticipant }) => {
             onChangeText={setName}
             placeholder="Enter your full name"
             placeholderTextColor="#5D4037aa"
+            editable={!submitting}
           />
         </View>
         <View style={styles.formGroup}>
@@ -44,6 +54,7 @@ const Registration = ({ addParticipant }) => {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            editable={!submitting}
           />
         </View>
         <View style={styles.formGroup}>
@@ -54,14 +65,20 @@ const Registration = ({ addParticipant }) => {
             onChangeText={setTeam}
             placeholder="Enter your team name"
             placeholderTextColor="#5D4037aa"
+            editable={!submitting}
           />
         </View>
         <TouchableOpacity 
-          style={styles.submitBtn} 
+          style={[styles.submitBtn, submitting && styles.disabledButton]} 
           onPress={handleSubmit}
-          activeOpacity={0.7}
+          disabled={submitting}
+          activeOpacity={submitting ? 1 : 0.7}
         >
-          <Text style={styles.submitBtnText}>Register</Text>
+          {submitting ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.submitBtnText}>Register</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>
