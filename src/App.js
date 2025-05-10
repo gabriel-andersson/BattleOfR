@@ -358,7 +358,7 @@ const App = () => {
     const updatedParticipants = participants.map(p => {
       if (p.id === participantId) {
         // Add to total points & store event-specific points
-        const newEventScores = { ...(p.events || {}), [eventName]: (p.events && p.events[eventName] || 0) + pointsToAdd };
+        const newEventScores = { ...(p.events || {}), [eventName]: ((p.events && p.events[eventName]) || 0) + pointsToAdd };
         return { 
           ...p, 
           points: (p.points || 0) + pointsToAdd, 
