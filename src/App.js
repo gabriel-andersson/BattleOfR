@@ -6,7 +6,8 @@ import {
   TouchableOpacity, 
   ScrollView,
   SafeAreaView,
-  TextInput
+  TextInput,
+  Image
 } from 'react-native';
 import './index.css'; // Import global CSS
 
@@ -47,13 +48,45 @@ const NavBar = ({ activeSection, setActiveSection }) => {
 
 // Schedule Component
 const Schedule = () => {
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  
   const scheduleItems = [
-    { time: '09:00', event: 'Opening Ceremony' },
-    { time: '10:00', event: 'Event 1: Swimming' },
-    { time: '12:00', event: 'Lunch Break' },
-    { time: '14:00', event: 'Event 2: Running' },
-    { time: '16:00', event: 'Event 3: Cycling' },
-    { time: '18:00', event: 'Dinner' }
+    { 
+      time: '09:00', 
+      event: 'Opening Ceremony',
+      details: 'Welcome to our Pentathlon Event! The opening ceremony will include speeches from organizers, introduction of teams, and a brief overview of today\'s events.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    },
+    { 
+      time: '10:00', 
+      event: 'Event 1: Swimming',
+      details: '200m freestyle swimming competition at the Olympic-sized pool. Participants must arrive 30 minutes before the event for warm-up.',
+      image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    },
+    { 
+      time: '12:00', 
+      event: 'Lunch Break',
+      details: 'A healthy lunch will be served at the main cafeteria. Vegetarian and vegan options are available.',
+      image: 'https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    },
+    { 
+      time: '14:00', 
+      event: 'Event 2: Running',
+      details: '3000m cross-country running. The course will go through the park and surrounding areas. Water stations are available every 1km.',
+      image: 'https://images.unsplash.com/photo-1486218119243-13883505764c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    },
+    { 
+      time: '16:00', 
+      event: 'Event 3: Cycling',
+      details: '10km cycling race on the city circuit. Helmets are mandatory. Participants must bring their own bikes or reserve one in advance.',
+      image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    },
+    { 
+      time: '18:00', 
+      event: 'Dinner',
+      details: 'A celebratory dinner will be served at the main hall, featuring a variety of dishes to accommodate all dietary requirements.',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    }
   ];
   
   return (
@@ -61,12 +94,51 @@ const Schedule = () => {
       <Text style={styles.sectionTitle}>Today's Schedule</Text>
       <View style={styles.scheduleContainer}>
         {scheduleItems.map((item, index) => (
-          <View key={index} style={styles.scheduleItem}>
+          <TouchableOpacity 
+            key={index} 
+            style={styles.scheduleItem}
+            onPress={() => setSelectedEvent(item)}
+          >
             <Text style={styles.scheduleTime}>{item.time}</Text>
-            <Text style={styles.scheduleEvent}>{item.event}</Text>
-          </View>
+            <View style={styles.scheduleContent}>
+              <Text style={styles.scheduleEvent}>{item.event}</Text>
+              <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </View>
+
+      {selectedEvent && (
+        <View style={styles.eventDetailsModal}>
+          <View style={styles.eventDetailsContent}>
+            <TouchableOpacity 
+              style={styles.closeButton} 
+              onPress={() => setSelectedEvent(null)}
+            >
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.eventImageContainer}>
+              <Image 
+                source={{ uri: selectedEvent.image }} 
+                style={styles.eventImage}
+                resizeMode="cover"
+              />
+            </View>
+            
+            <View style={styles.eventDetailsContainer}>
+              <View style={styles.eventDetailsHeader}>
+                <Text style={styles.eventDetailsTitle}>{selectedEvent.event}</Text>
+                <Text style={styles.eventDetailsTime}>{selectedEvent.time}</Text>
+              </View>
+              
+              <ScrollView style={styles.eventDetailsScroll}>
+                <Text style={styles.eventDescription}>{selectedEvent.details}</Text>
+              </ScrollView>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -303,15 +375,105 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     backgroundColor: '#f8f9fa',
-    borderRadius: 4,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   scheduleTime: {
     fontWeight: '700',
     width: 80,
     color: '#3498db',
   },
-  scheduleEvent: {
+  scheduleContent: {
     flex: 1,
+  },
+  scheduleEvent: {
+    fontWeight: '500',
+    color: '#2c3e50',
+    marginBottom: 4,
+    fontSize: 16,
+  },
+  scheduleDetailsHint: {
+    color: '#3498db',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  eventDetailsModal: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  eventDetailsContent: {
+    backgroundColor: 'white',
+    padding: 0,
+    borderRadius: 12,
+    width: '90%',
+    maxWidth: 500,
+    maxHeight: '80%',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 30,
+    height: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  eventImageContainer: {
+    width: '100%',
+    height: 200,
+    overflow: 'hidden',
+  },
+  eventImage: {
+    width: '100%',
+    height: '100%',
+  },
+  eventDetailsContainer: {
+    padding: 16, 
+    paddingTop: 0,
+    flex: 1,
+  },
+  eventDetailsHeader: {
+    paddingBottom: 8,
+  },
+  eventDetailsTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: 8,
+  },
+  eventDetailsTime: {
+    fontSize: 16,
+    color: '#3498db',
+    fontWeight: '500',
+  },
+  eventDetailsScroll: {
+    flex: 1,
+  },
+  eventDescription: {
+    color: '#2c3e50',
+    fontSize: 16,
+    lineHeight: 24,
   },
   // Meals styles
   mealsContainer: {
