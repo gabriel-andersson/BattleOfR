@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/pentathlon-app/static/css/main.859c4de1.css",
-    "main.js": "/pentathlon-app/static/js/main.8e3aa55e.js",
-    "static/js/453.2f1c2d2d.chunk.js": "/pentathlon-app/static/js/453.2f1c2d2d.chunk.js",
-    "index.html": "/pentathlon-app/index.html",
-    "main.859c4de1.css.map": "/pentathlon-app/static/css/main.859c4de1.css.map",
-    "main.8e3aa55e.js.map": "/pentathlon-app/static/js/main.8e3aa55e.js.map",
-    "453.2f1c2d2d.chunk.js.map": "/pentathlon-app/static/js/453.2f1c2d2d.chunk.js.map"
+    "main.css": "/BattleOfR/static/css/main.859c4de1.css",
+    "main.js": "/BattleOfR/static/js/main.dc7b34a4.js",
+    "static/js/453.2f1c2d2d.chunk.js": "/BattleOfR/static/js/453.2f1c2d2d.chunk.js",
+    "index.html": "/BattleOfR/index.html",
+    "main.859c4de1.css.map": "/BattleOfR/static/css/main.859c4de1.css.map",
+    "main.dc7b34a4.js.map": "/BattleOfR/static/js/main.dc7b34a4.js.map",
+    "453.2f1c2d2d.chunk.js.map": "/BattleOfR/static/js/453.2f1c2d2d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.859c4de1.css",
-    "static/js/main.8e3aa55e.js"
+    "static/js/main.dc7b34a4.js"
   ]
 }
