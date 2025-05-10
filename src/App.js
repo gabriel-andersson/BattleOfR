@@ -10,7 +10,6 @@ import {
   Image,
   ImageBackground,
   Dimensions, // Keep Dimensions API
-  Platform // Keep Platform API
 } from 'react-native';
 import './index.css'; // Import global CSS
 import logoImage from './logo.png'; // Import your logo image
@@ -435,7 +434,7 @@ const Results = ({ participants, updateScore }) => {
 const App = () => {
   const [activeSection, setActiveSection] = useState('schedule');
   const [participants, setParticipants] = useState([]);
-  const [smallScreen, setSmallScreen] = useState(isSmallScreen());
+  const [_smallScreen, setSmallScreen] = useState(isSmallScreen());
   
   // Handle screen resize
   useEffect(() => {
