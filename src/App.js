@@ -8,46 +8,102 @@ import {
   SafeAreaView,
   TextInput,
   Image,
-  ImageBackground
+  ImageBackground,
+  Dimensions, // Keep Dimensions API
+  Platform // Keep Platform API
 } from 'react-native';
 import './index.css'; // Import global CSS
 import logoImage from './logo.png'; // Import your logo image
 import scenicBackgroundImage from './background.png'; // Import the scenic background image
 
+// Use Dimensions to get screen width and determine if we're on a small screen
+const getWindowDimensions = () => Dimensions.get('window');
+const isSmallScreen = () => getWindowDimensions().width < 768;
+
 // Navigation component
 const NavBar = ({ activeSection, setActiveSection }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [smallScreen, setSmallScreen] = useState(isSmallScreen());
+  
+  // Handle screen resize for responsive behavior
+  useEffect(() => {
+    const handleDimensionsChange = ({ window }) => {
+      setSmallScreen(window.width < 768);
+      if (window.width >= 768) {
+        setMenuOpen(false); // Close menu when screen becomes large
+      }
+    };
+    
+    // Use Dimensions.addEventListener instead of window.addEventListener
+    const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
+    
+    // Return cleanup function
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleNavigation = (section) => {
+    setActiveSection(section);
+    if (smallScreen) {
+      setMenuOpen(false); // Close menu after selection on small screens
+    }
+  };
+
+  const renderNavLinks = () => {
+    const links = [
+      { id: 'schedule', label: 'Schedule' },
+      { id: 'registration', label: 'Registration' },
+      { id: 'leaderboard', label: 'Leaderboard' },
+      { id: 'results', label: 'Results' }
+    ];
+
+    return links.map(link => (
+      <TouchableOpacity 
+        key={link.id}
+        style={[
+          styles.navBtn, 
+          activeSection === link.id && styles.navBtnActive,
+          smallScreen && styles.navBtnMobile
+        ]} 
+        onPress={() => handleNavigation(link.id)}
+      >
+        <Text style={styles.navBtnText}>{link.label}</Text>
+      </TouchableOpacity>
+    ));
+  };
+
   return (
     <View style={styles.navbar}>
       <View style={styles.logoContainer}> 
         <Image source={logoImage} style={styles.logoImage} />
         <Text style={styles.logoText}>Battle Of Rossö</Text>
       </View>
-      <View style={styles.navLinks}>
-        <TouchableOpacity 
-          style={[styles.navBtn, activeSection === 'schedule' && styles.navBtnActive]} 
-          onPress={() => setActiveSection('schedule')}
-        >
-          <Text style={styles.navBtnText}>Schedule</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navBtn, activeSection === 'registration' && styles.navBtnActive]} 
-          onPress={() => setActiveSection('registration')}
-        >
-          <Text style={styles.navBtnText}>Registration</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navBtn, activeSection === 'leaderboard' && styles.navBtnActive]} 
-          onPress={() => setActiveSection('leaderboard')}
-        >
-          <Text style={styles.navBtnText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navBtn, activeSection === 'results' && styles.navBtnActive]} 
-          onPress={() => setActiveSection('results')}
-        >
-          <Text style={styles.navBtnText}>Results</Text>
-        </TouchableOpacity>
-      </View>
+      
+      {smallScreen ? (
+        <View>
+          <TouchableOpacity 
+            style={styles.menuToggle} 
+            onPress={toggleMenu}
+          >
+            <Text style={styles.menuToggleText}>☰</Text>
+          </TouchableOpacity>
+          
+          {menuOpen && (
+            <View style={styles.mobileMenu}>
+              {renderNavLinks()}
+            </View>
+          )}
+        </View>
+      ) : (
+        <View style={styles.navLinks}>
+          {renderNavLinks()}
+        </View>
+      )}
     </View>
   );
 };
@@ -55,6 +111,22 @@ const NavBar = ({ activeSection, setActiveSection }) => {
 // Schedule Component
 const Schedule = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [smallScreen, setSmallScreen] = useState(isSmallScreen());
+  
+  // Handle screen resize
+  useEffect(() => {
+    const handleDimensionsChange = ({ window }) => {
+      setSmallScreen(window.width < 768);
+    };
+    
+    // Use Dimensions.addEventListener instead of window.addEventListener
+    const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
+    
+    // Return cleanup function
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   
   const scheduleItems = [
     { 
@@ -104,6 +176,7 @@ const Schedule = () => {
             key={index} 
             style={styles.scheduleItem}
             onPress={() => setSelectedEvent(item)}
+            activeOpacity={0.7} // Add touch feedback
           >
             <Text style={styles.scheduleTime}>{item.time}</Text>
             <View style={styles.scheduleContent}>
@@ -116,10 +189,15 @@ const Schedule = () => {
 
       {selectedEvent && (
         <View style={styles.eventDetailsModal}>
-          <View style={styles.eventDetailsContent}>
+          <View style={[
+            styles.eventDetailsContent,
+            smallScreen && styles.eventDetailsContentMobile
+          ]}>
             <TouchableOpacity 
               style={styles.closeButton} 
               onPress={() => setSelectedEvent(null)}
+              hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }} // Expand touch area
+              activeOpacity={0.7} // Add touch feedback
             >
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
@@ -178,6 +256,7 @@ const Registration = ({ addParticipant }) => {
             value={name}
             onChangeText={setName}
             placeholder="Enter your full name"
+            placeholderTextColor="#5D4037aa"
           />
         </View>
         <View style={styles.formGroup}>
@@ -187,7 +266,10 @@ const Registration = ({ addParticipant }) => {
             value={email}
             onChangeText={setEmail}
             placeholder="Enter your email"
+            placeholderTextColor="#5D4037aa"
             keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
         </View>
         <View style={styles.formGroup}>
@@ -197,9 +279,14 @@ const Registration = ({ addParticipant }) => {
             value={team}
             onChangeText={setTeam}
             placeholder="Enter your team name"
+            placeholderTextColor="#5D4037aa"
           />
         </View>
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+        <TouchableOpacity 
+          style={styles.submitBtn} 
+          onPress={handleSubmit}
+          activeOpacity={0.7}
+        >
           <Text style={styles.submitBtnText}>Register</Text>
         </TouchableOpacity>
       </View>
@@ -209,23 +296,40 @@ const Registration = ({ addParticipant }) => {
 
 // Leaderboard Component
 const Leaderboard = ({ participants }) => {
+  const [smallScreen, setSmallScreen] = useState(isSmallScreen());
+  
+  // Handle screen resize
+  useEffect(() => {
+    const handleDimensionsChange = ({ window }) => {
+      setSmallScreen(window.width < 768);
+    };
+    
+    // Use Dimensions.addEventListener instead of window.addEventListener
+    const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
+    
+    // Return cleanup function
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Live Leaderboard</Text>
       <View style={styles.leaderboardContainer}>
         <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderCell, { flex: 1 }]}>Rank</Text>
-          <Text style={[styles.tableHeaderCell, { flex: 3 }]}>Name</Text>
+          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 0.5 : 1 }]}>Rank</Text>
+          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 2 : 3 }]}>Name</Text>
           <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Team</Text>
-          <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Points</Text>
+          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 1 : 2 }]}>Points</Text>
         </View>
         <ScrollView style={styles.tableBody}>
           {participants.map((participant, index) => (
             <View key={participant.id} style={styles.tableRow}>
-              <Text style={[styles.tableCell, { flex: 1 }]}>{index + 1}</Text>
-              <Text style={[styles.tableCell, { flex: 3 }]}>{participant.name}</Text>
+              <Text style={[styles.tableCell, { flex: smallScreen ? 0.5 : 1 }]}>{index + 1}</Text>
+              <Text style={[styles.tableCell, { flex: smallScreen ? 2 : 3 }]}>{participant.name}</Text>
               <Text style={[styles.tableCell, { flex: 2 }]}>{participant.team}</Text>
-              <Text style={[styles.tableCell, { flex: 2 }]}>{participant.points}</Text>
+              <Text style={[styles.tableCell, { flex: smallScreen ? 1 : 2 }]}>{participant.points}</Text>
             </View>
           ))}
         </ScrollView>
@@ -238,9 +342,8 @@ const Leaderboard = ({ participants }) => {
 const Results = ({ participants, updateScore }) => {
   const [participantName, setParticipantName] = useState('');
   const [points, setPoints] = useState('');
-  // Predefined events for simplicity. Could be dynamic based on Schedule items.
   const events = ['Event 1: Swimming', 'Event 2: Running', 'Event 3: Cycling'];
-  const [selectedEvent, setSelectedEvent] = useState(events[0]); // Default to first event
+  const [selectedEvent, setSelectedEvent] = useState(events[0]);
 
   const handleSubmit = () => {
     const participant = participants.find(p => p.name.toLowerCase() === participantName.toLowerCase());
@@ -277,13 +380,12 @@ const Results = ({ participants, updateScore }) => {
             value={participantName}
             onChangeText={setParticipantName}
             placeholder="Enter participant's full name"
+            placeholderTextColor="#5D4037aa" // More visible placeholder
           />
         </View>
         
-        {/* Basic Picker for Events - For a true dropdown, a custom component or library is needed */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Event:</Text>
-          {/* This is a very basic way to show a picker. For better UX, use a proper dropdown component */}
           <View style={styles.pickerContainer}> 
             {events.map(event => (
               <TouchableOpacity 
@@ -293,8 +395,14 @@ const Results = ({ participants, updateScore }) => {
                   selectedEvent === event && styles.pickerButtonActive
                 ]}
                 onPress={() => setSelectedEvent(event)}
+                activeOpacity={0.7} // Add touch feedback
               >
-                <Text style={styles.pickerButtonText}>{event}</Text>
+                <Text style={[
+                  styles.pickerButtonText,
+                  selectedEvent === event && styles.pickerButtonTextActive
+                ]}>
+                  {event}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -307,10 +415,15 @@ const Results = ({ participants, updateScore }) => {
             value={points}
             onChangeText={setPoints}
             placeholder="Enter points"
+            placeholderTextColor="#5D4037aa" // More visible placeholder
             keyboardType="number-pad"
           />
         </View>
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+        <TouchableOpacity 
+          style={styles.submitBtn} 
+          onPress={handleSubmit}
+          activeOpacity={0.7} // Add touch feedback
+        >
           <Text style={styles.submitBtnText}>Submit Score</Text>
         </TouchableOpacity>
       </View>
@@ -322,6 +435,22 @@ const Results = ({ participants, updateScore }) => {
 const App = () => {
   const [activeSection, setActiveSection] = useState('schedule');
   const [participants, setParticipants] = useState([]);
+  const [smallScreen, setSmallScreen] = useState(isSmallScreen());
+  
+  // Handle screen resize
+  useEffect(() => {
+    const handleDimensionsChange = ({ window }) => {
+      setSmallScreen(window.width < 768);
+    };
+    
+    // Use Dimensions.addEventListener instead of window.addEventListener
+    const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
+    
+    // Return cleanup function
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   
   // Load data from localStorage on initial render
   useEffect(() => {
@@ -380,7 +509,11 @@ const App = () => {
     >
       <SafeAreaView style={styles.safeAreaContainer}>
         <NavBar activeSection={activeSection} setActiveSection={setActiveSection} />
-        <ScrollView style={styles.mainScrollContainer}>
+        <ScrollView 
+          style={styles.mainScrollContainer}
+          showsVerticalScrollIndicator={false} // Hide scrollbar on mobile
+          contentContainerStyle={styles.mainScrollContent}
+        >
           {activeSection === 'schedule' && <Schedule />}
           {activeSection === 'registration' && <Registration addParticipant={addParticipant} />}
           {activeSection === 'leaderboard' && <Leaderboard participants={[...participants].sort((a, b) => b.points - a.points)} />}
@@ -426,10 +559,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#A0522D', // Sienna - Theme color
     borderBottomWidth: 2,
     borderBottomColor: '#793D23', // Darker Sienna for border
+    zIndex: 100, // Ensure dropdown menu appears above other content
   },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1, // Take up available space
   },
   logoImage: {
     width: 40,
@@ -450,6 +585,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 5,
   },
+  navBtnMobile: {
+    marginLeft: 0,
+    marginBottom: 10,
+    paddingVertical: 12, // Larger touch target
+    paddingHorizontal: 16,
+    width: '100%', // Full width in mobile menu
+  },
   navBtnActive: {
     backgroundColor: '#793D23', // Darker Sienna - Theme color for active
   },
@@ -461,16 +603,18 @@ const styles = StyleSheet.create({
   section: { // Common style for other sections (Meals, Registration, Leaderboard)
     ...baseSectionStyle,
     backgroundColor: '#3E4E5E', // Muted dark blue-grey
+    padding: Dimensions.get('window').width < 768 ? 16 : 24,
   },
   scheduleSectionContainer: { // Specific style for Schedule section container
     ...baseSectionStyle,
     backgroundColor: 'transparent',
+    padding: Dimensions.get('window').width < 768 ? 16 : 24,
   },
   sectionTitle: {
-    fontSize: 28, // Increased size
+    fontSize: Dimensions.get('window').width < 768 ? 24 : 28,
     fontWeight: 'bold',
-    marginBottom: 25, // Increased margin
-    color: '#F5F5DC', // Beige - Theme color
+    marginBottom: Dimensions.get('window').width < 768 ? 16 : 25,
+    color: '#F5F5DC',
     textAlign: 'center',
   },
   // Schedule styles
@@ -478,10 +622,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   scheduleItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: Dimensions.get('window').width < 480 ? 'column' : 'row',
+    alignItems: Dimensions.get('window').width < 480 ? 'flex-start' : 'center',
     padding: 16,
-    backgroundColor: '#5D4037', // Dark Brown
+    backgroundColor: '#5D4037',
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -492,8 +636,9 @@ const styles = StyleSheet.create({
   scheduleTime: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#F5F5DC', // Beige
-    width: 80,
+    color: '#F5F5DC',
+    width: Dimensions.get('window').width < 480 ? 'auto' : 80,
+    marginBottom: Dimensions.get('window').width < 480 ? 8 : 0,
   },
   scheduleContent: {
     flex: 1,
@@ -596,23 +741,23 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#A0522D', // Sienna border
-    padding: 12, // Increased padding
+    borderColor: '#A0522D',
+    padding: Dimensions.get('window').width < 768 ? 14 : 12,
     borderRadius: 5,
     fontSize: 16,
-    backgroundColor: '#FFF8DC', // Cornsilk background for input
-    color: '#5D4037', // Dark Brown text
-    marginBottom: 15, // Spacing
+    backgroundColor: '#FFF8DC',
+    color: '#5D4037',
+    marginBottom: 15,
   },
   submitBtn: {
-    backgroundColor: '#A0522D', // Sienna background
-    padding: 15,
+    backgroundColor: '#A0522D',
+    padding: Dimensions.get('window').width < 768 ? 18 : 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10, // Spacing
+    marginTop: 10,
   },
   submitBtnText: {
-    color: '#F5F5DC', // Beige text
+    color: '#F5F5DC',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -631,8 +776,8 @@ const styles = StyleSheet.create({
   },
   tableHeaderCell: {
     fontWeight: 'bold',
-    fontSize: 16,
-    color: '#F5F5DC', // Beige
+    fontSize: Dimensions.get('window').width < 768 ? 14 : 16,
+    color: '#F5F5DC',
     textAlign: 'center',
   },
   tableBody: {
@@ -645,8 +790,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#5D4037', // Dark Brown for row separator
   },
   tableCell: {
-    fontSize: 15,
-    color: '#FFF8DC', // Cornsilk for cell text
+    fontSize: Dimensions.get('window').width < 768 ? 13 : 15,
+    color: '#FFF8DC',
     textAlign: 'center',
   },
   // Styles for the basic event picker in Results section
@@ -657,12 +802,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   pickerButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: '#5D4037', // Dark Brown
+    paddingVertical: Dimensions.get('window').width < 768 ? 12 : 10,
+    paddingHorizontal: Dimensions.get('window').width < 768 ? 18 : 15,
+    backgroundColor: '#5D4037',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#A0522D', // Sienna
+    borderColor: '#A0522D',
   },
   pickerButtonActive: {
     backgroundColor: '#A0522D', // Sienna for active
@@ -671,6 +816,49 @@ const styles = StyleSheet.create({
   pickerButtonText: {
     color: '#F5F5DC', // Beige
     fontSize: 14,
+  },
+  // Mobile Menu Styles
+  menuToggle: {
+    padding: 10,
+  },
+  menuToggleText: {
+    color: '#F5F5DC',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  mobileMenu: {
+    position: 'absolute',
+    top: 50, // Position below the navbar
+    right: 0,
+    backgroundColor: '#A0522D',
+    padding: 15,
+    borderRadius: 5,
+    borderTopRightRadius: 0, // Square top-right corner to connect with navbar
+    borderWidth: 2,
+    borderColor: '#793D23',
+    borderTopWidth: 0, // No top border to connect with navbar
+    width: 200, // Fixed width for the dropdown
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  // Enhanced event details modal for mobile
+  eventDetailsContentMobile: {
+    width: '95%',
+    maxWidth: '100%',
+    maxHeight: '90%',
+    borderRadius: 8,
+  },
+  
+  // Enhanced touch interactions
+  pickerButtonTextActive: {
+    color: '#FFF8DC',
+    fontWeight: 'bold',
+  },
+  mainScrollContent: {
+    paddingBottom: 30, // Add padding at the bottom for better mobile scrolling
   },
 });
 

@@ -8,12 +8,15 @@ html, body, #root {
   background-color: #2c3e50; /* Dark Slate Blue fallback */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight on mobile */
+  touch-action: manipulation; /* Optimize touch actions */
 }
 
 /* For proper React Native Web rendering */
 #root {
   display: flex;
   flex: 1;
+  overflow-x: hidden; /* Prevent horizontal scrolling on mobile */
 }
 
 /* Add back scrolling for web */
@@ -36,6 +39,34 @@ html, body, #root {
   background: #793D23; /* Darker Sienna for hover */
 }
 
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, a, input[type="button"], input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Hide scrollbars on mobile but keep functionality */
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  
+  /* Prevent text selection on touch interfaces */
+  * {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* But allow selection in inputs */
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
 /* Fix for mobile */
 @media (max-width: 768px) {
   .navLinks {
@@ -45,5 +76,12 @@ html, body, #root {
   
   .mealCard {
     width: 100% !important;
+  }
+}
+
+/* Adjust keyboard appearance on iOS */
+@media (max-width: 768px) {
+  input, textarea {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
   }
 }
