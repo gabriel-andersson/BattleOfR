@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/BattleOfR/static/css/main.0c1769c2.css",
-    "main.js": "/BattleOfR/static/js/main.aeed7e07.js",
+    "main.js": "/BattleOfR/static/js/main.925e47bd.js",
     "static/js/453.2fd4d4a3.chunk.js": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js",
     "static/media/background.png": "/BattleOfR/static/media/background.c863667de79f7d106656.png",
     "static/media/logo.png": "/BattleOfR/static/media/logo.aed0a9e4e9025b3aba26.png",
@@ -12,11 +12,11 @@
     "static/media/golf_2.jpg": "/BattleOfR/static/media/golf_2.f3be3f064dbe264ffe01.jpg",
     "index.html": "/BattleOfR/index.html",
     "main.0c1769c2.css.map": "/BattleOfR/static/css/main.0c1769c2.css.map",
-    "main.aeed7e07.js.map": "/BattleOfR/static/js/main.aeed7e07.js.map",
+    "main.925e47bd.js.map": "/BattleOfR/static/js/main.925e47bd.js.map",
     "453.2fd4d4a3.chunk.js.map": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0c1769c2.css",
-    "static/js/main.aeed7e07.js"
+    "static/js/main.925e47bd.js"
   ]
 }
