@@ -5,7 +5,14 @@ import styles from '../styles/styles';
 const Results = ({ participants, updateScore, loading }) => {
   const [participantName, setParticipantName] = useState('');
   const [points, setPoints] = useState('');
-  const events = ['Event 1: Swimming', 'Event 2: Running', 'Event 3: Cycling'];
+  const events = [
+    'Gren 1: Golf ö', 
+    'Gren 2: Golf flagga', 
+    'Gren 3: Pilbåge v1', 
+    'Gren 4: Pilbåge v2', 
+    'Gren 5: Surfbräda + Tornbygge', 
+    'Gren 6: Elda snöre'
+  ];
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
 
