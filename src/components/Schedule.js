@@ -99,7 +99,7 @@ const Schedule = () => {
   
   return (
     <View style={styles.scheduleSectionContainer}>
-      <Text style={styles.sectionTitle}>Today's Schedule</Text>
+      <Text style={styles.sectionTitle}>Vad händer under dagen?</Text>
       <View style={styles.scheduleContainer}>
         {scheduleItems.map((item, index) => (
           <TouchableOpacity 

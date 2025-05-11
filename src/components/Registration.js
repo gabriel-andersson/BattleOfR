@@ -4,19 +4,20 @@ import styles from '../styles/styles';
 
 const Registration = ({ addParticipant }) => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
   const [team, setTeam] = useState('');
   const [submitting, setSubmitting] = useState(false);
   
   const handleSubmit = async () => {
-    if (name && email && team) {
+    if (name &&  team) {
+      // If name already exists.. do not allow it. 
       try {
         setSubmitting(true);
-        await addParticipant({ name, email, team });
+        await addParticipant({ name, team });
         setName('');
-        setEmail('');
+        // setEmail('');
         setTeam('');
-        alert('Registration successful!');
+        alert('Otroligt! Du är nu anmäld till Battle of Rossö. ');
       } catch (error) {
         console.error("Error registering participant:", error);
         alert('Registration failed. Please try again.');
@@ -24,26 +25,26 @@ const Registration = ({ addParticipant }) => {
         setSubmitting(false);
       }
     } else {
-      alert('Please fill in all fields');
+      alert('Fyll i alla fält');
     }
   };
   
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Participant Registration</Text>
+      <Text style={styles.sectionTitle}>Deltagar Registrering</Text>
       <View style={styles.formContainer}>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Full Name:</Text>
+          <Text style={styles.label}>Fullständigt Namn:</Text>
           <TextInput 
             style={styles.input} 
             value={name}
             onChangeText={setName}
-            placeholder="Enter your full name"
+            placeholder="Gustav Valdemar Olsson"
             placeholderTextColor="#5D4037aa"
             editable={!submitting}
           />
         </View>
-        <View style={styles.formGroup}>
+        {/* <View style={styles.formGroup}>
           <Text style={styles.label}>Email:</Text>
           <TextInput 
             style={styles.input} 
@@ -56,14 +57,14 @@ const Registration = ({ addParticipant }) => {
             autoCorrect={false}
             editable={!submitting}
           />
-        </View>
+        </View> */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Team:</Text>
+          <Text style={styles.label}>Ange Lagnamn:</Text>
           <TextInput 
             style={styles.input} 
             value={team}
             onChangeText={setTeam}
-            placeholder="Enter your team name"
+            placeholder="RossöLosers"
             placeholderTextColor="#5D4037aa"
             editable={!submitting}
           />
