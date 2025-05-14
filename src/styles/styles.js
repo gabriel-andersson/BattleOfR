@@ -368,6 +368,19 @@ const styles = StyleSheet.create({
     color: '#FFF8DC',
     textAlign: 'center',
   },
+  // New styles for game-specific leaderboard information
+  leaderboardInfo: {
+    marginTop: 15,
+    padding: 10,
+    backgroundColor: '#5D4037',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  leaderboardInfoText: {
+    fontSize: 16,
+    color: '#F5F5DC',
+    fontWeight: '500',
+  },
   // Styles for the basic event picker in Results section
   pickerContainer: {
     flexDirection: 'row',
