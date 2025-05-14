@@ -100,6 +100,19 @@ const styles = StyleSheet.create({
   scheduleContainer: {
     gap: 12,
   },
+  categoryContainer: {
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  categoryTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#F5F5DC',
+    marginBottom: 10,
+    paddingBottom: 5,
+    borderBottomWidth: 2,
+    borderBottomColor: '#A0522D',
+  },
   scheduleItem: {
     flexDirection: Dimensions.get('window').width < 480 ? 'column' : 'row',
     alignItems: Dimensions.get('window').width < 480 ? 'flex-start' : 'center',
