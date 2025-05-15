@@ -17,6 +17,150 @@ const baseSectionStyle = {
 };
 
 const styles = StyleSheet.create({
+  // Home Page styles
+  homePageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    minHeight: 600,
+  },
+  titleContainer: {
+    marginBottom: 60,
+    alignItems: 'center',
+  },
+  homePageTitle: {
+    fontSize: Dimensions.get('window').width < 768 ? 38 : 64,
+    fontWeight: 'bold',
+    color: '#F5F5DC', // Beige - Theme color
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 5,
+  },
+  countdownContainer: {
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 800,
+  },
+  countdownHeader: {
+    fontSize: 24,
+    color: '#F5F5DC',
+    marginBottom: 30,
+    fontWeight: '600',
+  },
+  countdownUnitsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    gap: Dimensions.get('window').width < 768 ? 15 : 30,
+  },
+  countdownUnit: {
+    alignItems: 'center',
+    minWidth: Dimensions.get('window').width < 768 ? 65 : 120,
+    backgroundColor: 'rgba(160, 82, 45, 0.7)', // Semi-transparent Sienna
+    borderRadius: 10,
+    padding: Dimensions.get('window').width < 768 ? 10 : 20,
+    borderWidth: 2,
+    borderColor: '#793D23', // Darker Sienna
+  },
+  countdownValue: {
+    fontSize: Dimensions.get('window').width < 768 ? 28 : 48,
+    fontWeight: 'bold',
+    color: '#F5F5DC',
+  },
+  countdownLabel: {
+    fontSize: Dimensions.get('window').width < 768 ? 12 : 16,
+    color: '#F5F5DC',
+    marginTop: 5,
+    fontWeight: '500',
+  },
+  eventDate: {
+    marginTop: 40,
+    fontSize: 18,
+    color: '#F5F5DC',
+    fontWeight: '500',
+  },
+  // Event In Progress styles
+  eventInProgressContainer: {
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 800,
+    marginTop: 20,
+  },
+  eventStatusBadge: {
+    backgroundColor: '#FF5722', // Bright orange for attention
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    marginBottom: 30,
+    borderWidth: 2,
+    borderColor: '#FFC107', // Gold border
+  },
+  eventStatusText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  eventInProgressTitle: {
+    fontSize: Dimensions.get('window').width < 768 ? 32 : 42,
+    fontWeight: 'bold',
+    color: '#F5F5DC',
+    textAlign: 'center',
+    marginBottom: 25,
+  },
+  eventInProgressText: {
+    fontSize: 20,
+    color: '#F5F5DC',
+    textAlign: 'center',
+    lineHeight: 30,
+    maxWidth: 600,
+  },
+  eventInProgressButton: {
+    backgroundColor: 'rgba(160, 82, 45, 0.7)', // Semi-transparent Sienna
+    borderRadius: 10,
+    padding: 15,
+    paddingHorizontal: 25,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#793D23', // Darker Sienna
+    marginBottom: 30,
+  },
+  currentActivityButton: {
+    backgroundColor: 'rgba(160, 82, 45, 0.7)', // Semi-transparent Sienna
+    borderRadius: 10,
+    padding: 15,
+    paddingHorizontal: 25,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#793D23', // Darker Sienna
+  },
+  currentActivityContainer: {
+    backgroundColor: 'rgba(160, 82, 45, 0.7)', // Semi-transparent Sienna
+    borderRadius: 10,
+    padding: 20,
+    width: '100%',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#793D23', // Darker Sienna
+  },
+  currentActivityLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFC107', // Gold
+    marginBottom: 15,
+  },
+  currentActivityText: {
+    fontSize: 18,
+    color: '#F5F5DC',
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  // End Home Page styles
+  
   appBackgroundImage: {
     flex: 1,
     backgroundColor: 'rgba(44, 62, 80, 0.75)', // This acts as an overlay/tint on the image

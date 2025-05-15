@@ -37,6 +37,7 @@ const NavBar = ({ activeSection, setActiveSection, logoImage }) => {
 
   const renderNavLinks = () => {
     const links = [
+      { id: 'home', label: 'Home' },
       { id: 'schedule', label: 'Schedule' },
       { id: 'registration', label: 'Registration' },
       { id: 'leaderboard', label: 'Leaderboard' },
@@ -60,10 +61,13 @@ const NavBar = ({ activeSection, setActiveSection, logoImage }) => {
 
   return (
     <View style={styles.navbar}>
-      <View style={styles.logoContainer}> 
+      <TouchableOpacity 
+        style={styles.logoContainer}
+        onPress={() => handleNavigation('home')}
+      > 
         <Image source={logoImage} style={styles.logoImage} />
         <Text style={styles.logoText}>Battle Of Rossö</Text>
-      </View>
+      </TouchableOpacity>
       
       {smallScreen ? (
         <View>

@@ -18,6 +18,7 @@ import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, query, orderBy
 
 // Import components
 import NavBar from './components/NavBar';
+import HomePage from './components/HomePage';
 import Schedule from './components/Schedule';
 import Registration from './components/Registration';
 import Leaderboard from './components/Leaderboard';
@@ -25,7 +26,7 @@ import Results from './components/Results';
 
 // Main App
 const App = () => {
-  const [activeSection, setActiveSection] = useState('schedule');
+  const [activeSection, setActiveSection] = useState('home');
   const [participants, setParticipants] = useState([]);
   const [_smallScreen, setSmallScreen] = useState(isSmallScreen());
   const [loading, setLoading] = useState(true);
@@ -311,6 +312,7 @@ const App = () => {
           showsVerticalScrollIndicator={false} // Hide scrollbar on mobile
           contentContainerStyle={styles.mainScrollContent}
         >
+          {activeSection === 'home' && <HomePage setActiveSection={setActiveSection} />}
           {activeSection === 'schedule' && <Schedule />}
           {activeSection === 'registration' && <Registration addParticipant={addParticipant} />}
           {activeSection === 'leaderboard' && <Leaderboard 
