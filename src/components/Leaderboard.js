@@ -6,6 +6,7 @@ const Leaderboard = ({ participants, loading }) => {
   const [smallScreen, setSmallScreen] = useState(isSmallScreen());
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('total');
+  const [viewMode, setViewMode] = useState('individual'); // 'individual' or 'team'
   
   // Define game events
   const gameEvents = [
@@ -52,18 +53,67 @@ const Leaderboard = ({ participants, loading }) => {
     }
   }, [participants, loading]);
 
-  // Sort participants for the selected game or by total points
-  const getSortedParticipants = () => {
+  // Get team data by aggregating individual scores
+  const getTeamData = () => {
     if (!participants || participants.length === 0) return [];
     
-    if (activeTab === 'total') {
-      return [...participants].sort((a, b) => b.points - a.points);
-    } else {
-      return [...participants].sort((a, b) => {
-        const aPoints = a.events && a.events[activeTab] ? a.events[activeTab] : 0;
-        const bPoints = b.events && b.events[activeTab] ? b.events[activeTab] : 0;
-        return bPoints - aPoints;
-      });
+    const teams = {};
+    
+    participants.forEach(participant => {
+      const teamName = participant.team;
+      if (!teamName) return;
+      
+      if (!teams[teamName]) {
+        teams[teamName] = {
+          name: teamName,
+          points: 0,
+          events: {}
+        };
+      }
+      
+      // Add total points
+      teams[teamName].points += participant.points || 0;
+      
+      // Add event-specific points
+      if (participant.events) {
+        Object.entries(participant.events).forEach(([eventName, points]) => {
+          if (!teams[teamName].events[eventName]) {
+            teams[teamName].events[eventName] = 0;
+          }
+          teams[teamName].events[eventName] += points;
+        });
+      }
+    });
+    
+    return Object.values(teams);
+  };
+
+  // Sort participants or teams for the selected game or by total points
+  const getSortedParticipants = () => {
+    if (viewMode === 'individual') {
+      if (!participants || participants.length === 0) return [];
+      
+      if (activeTab === 'total') {
+        return [...participants].sort((a, b) => b.points - a.points);
+      } else {
+        return [...participants].sort((a, b) => {
+          const aPoints = a.events && a.events[activeTab] ? a.events[activeTab] : 0;
+          const bPoints = b.events && b.events[activeTab] ? b.events[activeTab] : 0;
+          return bPoints - aPoints;
+        });
+      }
+    } else { // Team view
+      const teamData = getTeamData();
+      
+      if (activeTab === 'total') {
+        return teamData.sort((a, b) => b.points - a.points);
+      } else {
+        return teamData.sort((a, b) => {
+          const aPoints = a.events && a.events[activeTab] ? a.events[activeTab] : 0;
+          const bPoints = b.events && b.events[activeTab] ? b.events[activeTab] : 0;
+          return bPoints - aPoints;
+        });
+      }
     }
   };
 
@@ -82,6 +132,26 @@ const Leaderboard = ({ participants, loading }) => {
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Live Leaderboard</Text>
+      
+      {/* View mode toggle */}
+      <View style={styles.viewModeContainer}>
+        <TouchableOpacity 
+          style={[styles.viewModeButton, viewMode === 'individual' && styles.viewModeButtonActive]}
+          onPress={() => setViewMode('individual')}
+        >
+          <Text style={[styles.viewModeButtonText, viewMode === 'individual' && styles.viewModeButtonTextActive]}>
+            Individual
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.viewModeButton, viewMode === 'team' && styles.viewModeButtonActive]}
+          onPress={() => setViewMode('team')}
+        >
+          <Text style={[styles.viewModeButtonText, viewMode === 'team' && styles.viewModeButtonTextActive]}>
+            Teams
+          </Text>
+        </TouchableOpacity>
+      </View>
       
       {/* Tab navigation */}
       <View style={styles.pickerContainer}>
@@ -110,8 +180,12 @@ const Leaderboard = ({ participants, loading }) => {
       <View style={styles.leaderboardContainer}>
         <View style={styles.tableHeader}>
           <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 0.5 : 1 }]}>Rank</Text>
-          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 2 : 3 }]}>Name</Text>
-          <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Team</Text>
+          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 2 : 3 }]}>
+            {viewMode === 'individual' ? 'Name' : 'Team'}
+          </Text>
+          {viewMode === 'individual' && (
+            <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Team</Text>
+          )}
           <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 1 : 2 }]}>
             {activeTab === 'total' ? 'Points' : 'Game Points'}
           </Text>
@@ -124,20 +198,22 @@ const Leaderboard = ({ participants, loading }) => {
           </View>
         ) : (
           <ScrollView style={styles.tableBody}>
-            {!participants || participants.length === 0 ? (
+            {getSortedParticipants().length === 0 ? (
               <View style={styles.emptyStateContainer}>
-                <Text style={styles.emptyStateText}>No participants found</Text>
+                <Text style={styles.emptyStateText}>No data found</Text>
               </View>
             ) : (
-              getSortedParticipants().map((participant, index) => (
-                <View key={participant.id} style={styles.tableRow}>
+              getSortedParticipants().map((item, index) => (
+                <View key={viewMode === 'individual' ? item.id : item.name} style={styles.tableRow}>
                   <Text style={[styles.tableCell, { flex: smallScreen ? 0.5 : 1 }]}>{index + 1}</Text>
-                  <Text style={[styles.tableCell, { flex: smallScreen ? 2 : 3 }]}>{participant.name}</Text>
-                  <Text style={[styles.tableCell, { flex: 2 }]}>{participant.team}</Text>
+                  <Text style={[styles.tableCell, { flex: smallScreen ? 2 : 3 }]}>{item.name}</Text>
+                  {viewMode === 'individual' && (
+                    <Text style={[styles.tableCell, { flex: 2 }]}>{item.team}</Text>
+                  )}
                   <Text style={[styles.tableCell, { flex: smallScreen ? 1 : 2 }]}>
                     {activeTab === 'total' 
-                      ? participant.points || 0 
-                      : (participant.events && participant.events[activeTab]) || 0}
+                      ? item.points || 0 
+                      : (item.events && item.events[activeTab]) || 0}
                   </Text>
                 </View>
               ))
@@ -149,7 +225,7 @@ const Leaderboard = ({ participants, loading }) => {
       {activeTab !== 'total' && (
         <View style={styles.leaderboardInfo}>
           <Text style={styles.leaderboardInfoText}>
-            {activeTab.includes(':') ? activeTab : ''}
+            {activeTab}
           </Text>
         </View>
       )}

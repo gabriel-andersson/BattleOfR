@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     ...baseSectionStyle,
     backgroundColor: '#3E4E5E', // Muted dark blue-grey
     padding: Dimensions.get('window').width < 768 ? 16 : 24,
+    overflow: 'visible', // Ensure dropdowns can extend outside
   },
   scheduleSectionContainer: { // Specific style for Schedule section container
     ...baseSectionStyle,
@@ -225,6 +226,8 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginBottom: 16,
+    position: 'relative',
+    overflow: 'visible', // Allow dropdown to be visible outside container
   },
   label: {
     marginBottom: 8,
@@ -374,35 +377,65 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#5D4037',
     borderRadius: 5,
-    alignItems: 'center',
+    alignSelf: 'center',
   },
   leaderboardInfoText: {
-    fontSize: 16,
     color: '#F5F5DC',
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   // Styles for the basic event picker in Results section
   pickerContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    justifyContent: 'center',
     marginBottom: 15,
+    position: 'relative',
+    zIndex: 1, // Lower z-index than dropdown
   },
   pickerButton: {
-    paddingVertical: Dimensions.get('window').width < 768 ? 12 : 10,
-    paddingHorizontal: Dimensions.get('window').width < 768 ? 18 : 15,
-    backgroundColor: '#5D4037',
+    padding: 10,
+    marginHorizontal: 5,
+    marginVertical: 5,
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#A0522D',
+    backgroundColor: '#5D4037',
+    minWidth: 80,
   },
   pickerButtonActive: {
-    backgroundColor: '#A0522D', // Sienna for active
-    borderColor: '#F5F5DC', // Beige border for active
+    backgroundColor: '#A0522D',
   },
   pickerButtonText: {
-    color: '#F5F5DC', // Beige
-    fontSize: 14,
+    color: '#F5F5DC',
+    textAlign: 'center',
+    fontSize: 15,
+  },
+  pickerButtonTextActive: {
+    fontWeight: 'bold',
+  },
+  // View mode toggle styles
+  viewModeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  viewModeButton: {
+    padding: 12,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    backgroundColor: '#5D4037',
+    minWidth: 100,
+  },
+  viewModeButtonActive: {
+    backgroundColor: '#A0522D',
+  },
+  viewModeButtonText: {
+    color: '#F5F5DC',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  viewModeButtonTextActive: {
+    fontWeight: 'bold',
   },
   // Mobile Menu Styles
   menuToggle: {
@@ -438,14 +471,80 @@ const styles = StyleSheet.create({
     maxHeight: '90%',
     borderRadius: 8,
   },
-  
-  // Enhanced touch interactions
-  pickerButtonTextActive: {
-    color: '#FFF8DC',
-    fontWeight: 'bold',
-  },
   mainScrollContent: {
     paddingBottom: 30, // Add padding at the bottom for better mobile scrolling
+  },
+  // Dropdown styles for participant selector
+  dropdownContainer: {
+    position: 'relative',
+    marginBottom: 15,
+    zIndex: 9999,
+  },
+  dropdownTrigger: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF8DC',
+    borderWidth: 1,
+    borderColor: '#A0522D',
+    borderRadius: 5,
+    padding: 12,
+  },
+  dropdownTriggerActive: {
+    backgroundColor: '#FFF8DC',
+    borderColor: '#A0522D',
+    borderWidth: 2,
+  },
+  dropdownTriggerText: {
+    fontSize: 16,
+    color: '#5D4037',
+    flex: 1,
+  },
+  dropdownTriggerTextActive: {
+    color: '#A0522D',
+    fontWeight: 'bold',
+  },
+  dropdownArrow: {
+    color: '#A0522D',
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFF8DC',
+    borderWidth: 1,
+    borderColor: '#A0522D',
+    borderRadius: 5,
+    maxHeight: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 9999,
+    overflow: 'visible', // Ensure menu items are visible
+  },
+  dropdownScrollView: {
+    maxHeight: 200,
+  },
+  dropdownMenuItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#A0522D22',
+  },
+  dropdownMenuItemActive: {
+    backgroundColor: '#A0522D33',
+  },
+  dropdownMenuItemText: {
+    fontSize: 16,
+    color: '#5D4037',
+  },
+  dropdownMenuItemTextActive: {
+    fontWeight: 'bold',
+    color: '#A0522D',
   },
 });
 

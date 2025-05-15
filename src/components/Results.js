@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import styles from '../styles/styles';
 
 const Results = ({ participants, updateScore, loading }) => {
-  const [participantName, setParticipantName] = useState('');
+  const [selectedParticipantId, setSelectedParticipantId] = useState('');
   const [points, setPoints] = useState('');
   const events = [
       'Game 1: Ö-golf', 
@@ -17,17 +17,27 @@ const Results = ({ participants, updateScore, loading }) => {
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
 
+  // For debugging
+  useEffect(() => {
+    console.log("All participants:", participants);
+    console.log("Selected participant ID:", selectedParticipantId);
+    
+    if (selectedParticipantId) {
+      const selected = participants.find(p => p.id === selectedParticipantId);
+      console.log("Found participant:", selected);
+    }
+  }, [participants, selectedParticipantId]);
+
   const handleSubmit = async () => {
     if (loading) {
       alert('Please wait until data is loaded');
       return;
     }
 
-    const participant = participants.find(p => p.name.toLowerCase() === participantName.toLowerCase());
     const pointsToAdd = parseInt(points, 10);
 
-    if (!participant) {
-      alert('Participant not found. Please check the name.');
+    if (!selectedParticipantId) {
+      alert('Please select a participant.');
       return;
     }
     if (isNaN(pointsToAdd)) {
@@ -42,10 +52,8 @@ const Results = ({ participants, updateScore, loading }) => {
     try {
       setSubmitting(true);
       // Pass participantId, points, and optionally the event name
-      await updateScore(participant.id, pointsToAdd, selectedEvent);
-      setParticipantName('');
+      await updateScore(selectedParticipantId, pointsToAdd, selectedEvent);
       setPoints('');
-      // Optionally reset selectedEvent or provide feedback
     } catch (error) {
       console.error("Error submitting score:", error);
       alert('Error submitting score. Please try again.');
@@ -70,18 +78,41 @@ const Results = ({ participants, updateScore, loading }) => {
     <View style={styles.section}> 
       <Text style={styles.sectionTitle}>Register Results</Text>
       <View style={styles.formContainer}>
+        {/* Native select dropdown for participant selection */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Participant Name:</Text>
-          <TextInput 
-            style={styles.input} 
-            value={participantName}
-            onChangeText={setParticipantName}
-            placeholder="Enter participant's full name"
-            placeholderTextColor="#5D4037aa" // More visible placeholder
-            editable={!submitting}
-          />
+          <Text style={styles.label}>Select Participant:</Text>
+          
+          {/* Use native HTML select for better compatibility */}
+          <select
+            style={{
+              width: '100%',
+              padding: 12,
+              borderRadius: 5,
+              border: selectedParticipantId ? '2px solid #A0522D' : '1px solid #A0522D',
+              backgroundColor: '#FFF8DC',
+              color: selectedParticipantId ? '#A0522D' : '#5D4037',
+              fontSize: 16,
+              fontWeight: selectedParticipantId ? 'bold' : 'normal',
+              marginBottom: 15,
+              cursor: 'pointer'
+            }}
+            value={selectedParticipantId}
+            onChange={(e) => {
+              console.log("Select changed to:", e.target.value);
+              setSelectedParticipantId(e.target.value);
+            }}
+            disabled={submitting}
+          >
+            <option value="">Select a participant</option>
+            {participants.map((participant) => (
+              <option key={participant.id} value={participant.id}>
+                {participant.name} ({participant.team})
+              </option>
+            ))}
+          </select>
         </View>
         
+        {/* Game selection */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Event:</Text>
           <View style={styles.pickerContainer}> 
@@ -94,7 +125,7 @@ const Results = ({ participants, updateScore, loading }) => {
                   submitting && styles.disabledButton
                 ]}
                 onPress={() => !submitting && setSelectedEvent(event)}
-                activeOpacity={submitting ? 1 : 0.7} // Add touch feedback
+                activeOpacity={submitting ? 1 : 0.7}
                 disabled={submitting}
               >
                 <Text style={[
@@ -109,6 +140,7 @@ const Results = ({ participants, updateScore, loading }) => {
           </View>
         </View>
 
+        {/* Points input */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Points Awarded:</Text>
           <TextInput 
@@ -116,15 +148,17 @@ const Results = ({ participants, updateScore, loading }) => {
             value={points}
             onChangeText={setPoints}
             placeholder="Enter points"
-            placeholderTextColor="#5D4037aa" // More visible placeholder
+            placeholderTextColor="#5D4037aa"
             keyboardType="number-pad"
             editable={!submitting}
           />
         </View>
+        
+        {/* Submit button */}
         <TouchableOpacity 
           style={[styles.submitBtn, submitting && styles.disabledButton]} 
           onPress={handleSubmit}
-          activeOpacity={submitting ? 1 : 0.7} // Add touch feedback
+          activeOpacity={submitting ? 1 : 0.7}
           disabled={submitting}
         >
           {submitting ? (
