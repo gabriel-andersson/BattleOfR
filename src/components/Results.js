@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import styles from '../styles/styles';
 
 const Results = ({ participants, updateScore, loading }) => {
   const [selectedParticipantId, setSelectedParticipantId] = useState('');
   const [points, setPoints] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const events = [
       'Game 1: Ö-golf', 
       'Game 2: Närmast flaggan', 
@@ -16,6 +17,52 @@ const Results = ({ participants, updateScore, loading }) => {
   ];
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
+
+  const dropdownStyles = {
+    trigger: {
+      backgroundColor: '#F5F5DC',
+      borderWidth: 1,
+      borderColor: '#793D23',
+      borderRadius: 8,
+      padding: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    triggerText: {
+      color: '#5D4037',
+      fontSize: 16,
+    },
+    menu: {
+      backgroundColor: '#F5F5DC',
+      borderWidth: 1,
+      borderColor: '#793D23',
+      borderRadius: 8,
+      marginTop: 4,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      maxHeight: 200,
+    },
+    menuItem: {
+      padding: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: '#DDD5C7',
+    },
+    menuItemActive: {
+      backgroundColor: '#DDD5C7',
+    },
+    menuItemText: {
+      color: '#5D4037',
+      fontSize: 16,
+    },
+    menuItemTextActive: {
+      color: '#793D23',
+      fontWeight: 'bold',
+    }
+  };
 
   // For debugging
   useEffect(() => {
@@ -51,7 +98,6 @@ const Results = ({ participants, updateScore, loading }) => {
 
     try {
       setSubmitting(true);
-      // Pass participantId, points, and optionally the event name
       await updateScore(selectedParticipantId, pointsToAdd, selectedEvent);
       setPoints('');
     } catch (error) {
@@ -60,6 +106,20 @@ const Results = ({ participants, updateScore, loading }) => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const selectParticipant = (id) => {
+    setSelectedParticipantId(id);
+    setDropdownOpen(false);
+  };
+
+  const getSelectedParticipantName = () => {
+    const participant = participants.find(p => p.id === selectedParticipantId);
+    return participant ? `${participant.name} (${participant.team})` : 'Välj en deltagare';
   };
 
   if (loading) {
@@ -78,42 +138,63 @@ const Results = ({ participants, updateScore, loading }) => {
     <View style={styles.section}> 
       <Text style={styles.sectionTitle}>Registrera resultat</Text>
       <View style={styles.formContainer}>
-        {/* Native select dropdown for participant selection */}
-        <View style={styles.formGroup}>
+        <View style={[styles.formGroup, { zIndex: 3 }]}>
           <Text style={styles.label}>Välj deltagare:</Text>
-          
-          {/* Use native HTML select for better compatibility */}
-          <select
-            style={{
-              width: '100%',
-              padding: 12,
-              borderRadius: 5,
-              border: selectedParticipantId ? '2px solid #A0522D' : '1px solid #A0522D',
-              backgroundColor: '#FFF8DC',
-              color: selectedParticipantId ? '#A0522D' : '#5D4037',
-              fontSize: 16,
-              fontWeight: selectedParticipantId ? 'bold' : 'normal',
-              marginBottom: 15,
-              cursor: 'pointer'
-            }}
-            value={selectedParticipantId}
-            onChange={(e) => {
-              console.log("Select changed to:", e.target.value);
-              setSelectedParticipantId(e.target.value);
-            }}
-            disabled={submitting}
-          >
-            <option value="">Välj en deltagare</option>
-            {participants.map((participant) => (
-              <option key={participant.id} value={participant.id}>
-                {participant.name} ({participant.team})
-              </option>
-            ))}
-          </select>
+          <View style={[styles.dropdownContainer, { zIndex: 1000 }]}>
+            <TouchableOpacity 
+              style={[dropdownStyles.trigger, dropdownOpen && dropdownStyles.menuItemActive]} 
+              onPress={toggleDropdown}
+              disabled={submitting}
+            >
+              <Text style={dropdownStyles.triggerText}>
+                {getSelectedParticipantName()}
+              </Text>
+              <Text style={dropdownStyles.triggerText}>{dropdownOpen ? '▲' : '▼'}</Text>
+            </TouchableOpacity>
+            
+            {dropdownOpen && (
+              <View style={[
+                dropdownStyles.menu,
+                { 
+                  position: 'absolute', 
+                  top: '100%', 
+                  left: 0, 
+                  right: 0, 
+                  zIndex: 9999,
+                }
+              ]}>
+                <ScrollView 
+                  nestedScrollEnabled={true}
+                  keyboardShouldPersistTaps="handled"
+                >
+                  {participants.map((participant, index) => (
+                    <TouchableOpacity
+                      key={participant.id}
+                      style={[
+                        dropdownStyles.menuItem,
+                        selectedParticipantId === participant.id && dropdownStyles.menuItemActive,
+                        index === participants.length - 1 && { borderBottomWidth: 0 }
+                      ]}
+                      onPress={() => selectParticipant(participant.id)}
+                    >
+                      <Text 
+                        style={[
+                          dropdownStyles.menuItemText,
+                          selectedParticipantId === participant.id && dropdownStyles.menuItemTextActive
+                        ]}
+                      >
+                        {participant.name} ({participant.team})
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+          </View>
         </View>
         
         {/* Game selection */}
-        <View style={styles.formGroup}>
+        <View style={[styles.formGroup, { zIndex: 2 }]}>
           <Text style={styles.label}>Game:</Text>
           <View style={styles.pickerContainer}> 
             {events.map(event => (
@@ -141,7 +222,7 @@ const Results = ({ participants, updateScore, loading }) => {
         </View>
 
         {/* Points input */}
-        <View style={styles.formGroup}>
+        <View style={[styles.formGroup, { zIndex: 1 }]}>
           <Text style={styles.label}>Resultat:</Text>
           <TextInput 
             style={styles.input} 
@@ -155,20 +236,22 @@ const Results = ({ participants, updateScore, loading }) => {
         </View>
         
         {/* Submit button */}
-        <TouchableOpacity 
-          style={[styles.submitBtn, submitting && styles.disabledButton]} 
-          onPress={handleSubmit}
-          activeOpacity={submitting ? 1 : 0.7}
-          disabled={submitting}
-        >
-          {submitting ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <Text style={styles.submitBtnText}>
-              Registrera resultat
-            </Text>
-          )}
-        </TouchableOpacity>
+        <View style={{ zIndex: 1 }}>
+          <TouchableOpacity 
+            style={[styles.submitBtn, submitting && styles.disabledButton]} 
+            onPress={handleSubmit}
+            activeOpacity={submitting ? 1 : 0.7}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.submitBtnText}>
+                Registrera resultat
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
