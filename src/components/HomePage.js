@@ -51,7 +51,7 @@ const HomePage = ({ setActiveSection }) => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
-          toValue: 1.05,
+          toValue: 1.04,
           duration: 1000,
           easing: Easing.easeInOut,
           useNativeDriver: true
@@ -204,7 +204,14 @@ const HomePage = ({ setActiveSection }) => {
           }
         ]}
       >
-        <Text style={styles.homePageTitle}>Battle Of Rossö</Text>
+        <Animated.Text 
+          style={[
+            styles.homePageTitle,
+            { transform: [{ scale: pulseAnim }] }
+          ]}
+        >
+          Battle Of Rossö
+        </Animated.Text>
       </Animated.View>
       
       {eventStarted ? (
