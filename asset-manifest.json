@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/BattleOfR/static/css/main.0c1769c2.css",
-    "main.js": "/BattleOfR/static/js/main.db2c3dba.js",
+    "main.js": "/BattleOfR/static/js/main.feaa04a4.js",
     "static/js/453.2fd4d4a3.chunk.js": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js",
     "static/media/spik.png": "/BattleOfR/static/media/spik.7867aa301f0ec5a08264.png",
     "static/media/background.png": "/BattleOfR/static/media/background.c863667de79f7d106656.png",
@@ -14,11 +14,11 @@
     "static/media/golf_2.jpg": "/BattleOfR/static/media/golf_2.f3be3f064dbe264ffe01.jpg",
     "index.html": "/BattleOfR/index.html",
     "main.0c1769c2.css.map": "/BattleOfR/static/css/main.0c1769c2.css.map",
-    "main.db2c3dba.js.map": "/BattleOfR/static/js/main.db2c3dba.js.map",
+    "main.feaa04a4.js.map": "/BattleOfR/static/js/main.feaa04a4.js.map",
     "453.2fd4d4a3.chunk.js.map": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0c1769c2.css",
-    "static/js/main.db2c3dba.js"
+    "static/js/main.feaa04a4.js"
   ]
 }
