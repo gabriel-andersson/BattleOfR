@@ -37,7 +37,7 @@ const Schedule = () => {
       event: 'Öppnings Cermoni',
       details: 'Energiladdning inför dagen.  ',
       image: korv,
-      category: 'general'
+      category: 'pregame'
     },
     { 
       time: '12:30', 
@@ -106,7 +106,7 @@ const Schedule = () => {
   
   // Group schedule items by category
   const groupedScheduleItems = {
-    general: scheduleItems.filter(item => item.category === 'general'),
+    pregame: scheduleItems.filter(item => item.category === 'pregame'),
     precision: scheduleItems.filter(item => item.category === 'precision'),
     brunk: scheduleItems.filter(item => item.category === 'brunk'),
     överlevnad: scheduleItems.filter(item => item.category === 'överlevnad'),
@@ -119,7 +119,7 @@ const Schedule = () => {
       <View style={styles.scheduleContainer}>
         {/* General events (opening and closing ceremonies) */}
         <Text style={styles.categoryTitle}>Farciminis</Text>
-        {groupedScheduleItems.general.filter(item => item.time === '11:30').map((item, index) => (
+        {groupedScheduleItems.pregame.map((item, index) => (
           <TouchableOpacity 
             key={index} 
             style={styles.scheduleItem}

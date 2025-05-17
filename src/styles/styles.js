@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   },
   eventDetailsContainer: {
     padding: 16, 
-    paddingTop: 0,
+    paddingTop: 10,
     flex: 1,
   },
   eventDetailsHeader: {
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   eventDetailsTime: {
     fontSize: 16,
     color: '#FFF8DC', // Cornsilk
-    marginBottom: 15,
+    marginBottom: 2,
   },
   eventDetailsScroll: {
     flex: 1,
