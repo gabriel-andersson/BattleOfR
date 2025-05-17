@@ -278,11 +278,7 @@ const App = () => {
   };
   
   return (
-    <ImageBackground 
-      source={scenicBackgroundImage} 
-      style={styles.appBackgroundImage}
-      resizeMode="cover"
-    >
+    activeSection === 'home' ? (
       <SafeAreaView style={styles.safeAreaContainer}>
         <NavBar 
           activeSection={activeSection} 
@@ -309,20 +305,58 @@ const App = () => {
         
         <ScrollView 
           style={styles.mainScrollContainer}
-          showsVerticalScrollIndicator={false} // Hide scrollbar on mobile
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.mainScrollContent}
         >
-          {activeSection === 'home' && <HomePage setActiveSection={setActiveSection} />}
-          {activeSection === 'schedule' && <Schedule />}
-          {activeSection === 'registration' && <Registration addParticipant={addParticipant} />}
-          {activeSection === 'leaderboard' && <Leaderboard 
-            participants={[...participants].sort((a, b) => b.points - a.points)} 
-            loading={loading}
-          />}
-          {activeSection === 'results' && <Results participants={participants} updateScore={updateScore} loading={loading} />}
+          <HomePage setActiveSection={setActiveSection} />
         </ScrollView>
       </SafeAreaView>
-    </ImageBackground>
+    ) : (
+      <ImageBackground 
+        source={scenicBackgroundImage} 
+        style={styles.appBackgroundImage}
+        resizeMode="cover"
+      >
+        <SafeAreaView style={styles.safeAreaContainer}>
+          <NavBar 
+            activeSection={activeSection} 
+            setActiveSection={setActiveSection}
+            logoImage={logoImage}
+          />
+          
+          {error && (
+            <View style={styles.errorBanner}>
+              <Text style={styles.errorBannerText}>{error}</Text>
+              <TouchableOpacity 
+                style={styles.resetButton} 
+                onPress={handleResetConnection}
+                disabled={isResetting}
+              >
+                {isResetting ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.resetButtonText}>Reset Connection</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+          
+          <ScrollView 
+            style={styles.mainScrollContainer}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.mainScrollContent}
+          >
+            {activeSection === 'schedule' && <Schedule />}
+            {activeSection === 'registration' && <Registration addParticipant={addParticipant} />}
+            {activeSection === 'leaderboard' && <Leaderboard 
+              participants={[...participants].sort((a, b) => b.points - a.points)} 
+              loading={loading}
+            />}
+            {activeSection === 'results' && <Results participants={participants} updateScore={updateScore} loading={loading} />}
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
+    )
   );
 };
 

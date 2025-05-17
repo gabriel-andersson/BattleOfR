@@ -42,7 +42,7 @@ const HomePage = ({ setActiveSection }) => {
       
       Animated.timing(backgroundPosition, {
         toValue,
-        duration: 15000, // 15 seconds for each direction
+        duration: 8000, // # of milliseconds for each direction
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }).start(({ finished }) => {
@@ -233,7 +233,7 @@ const HomePage = ({ setActiveSection }) => {
         onPress={() => setActiveSection('leaderboard')}
       >
         <Text style={styles.currentActivityText}>
-          Kika in på leaderboard här
+          Kika in på resultaten här
         </Text>
       </TouchableOpacity>
     </Animated.View>
