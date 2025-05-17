@@ -18,13 +18,7 @@ const baseSectionStyle = {
 
 const styles = StyleSheet.create({
   // Home Page styles
-  homePageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    minHeight: 600,
-  },
+    homePageContainer: {    flex: 1,    justifyContent: 'center',    alignItems: 'center',    padding: 20,    minHeight: 600,    position: 'relative',    overflow: 'hidden',  },
   titleContainer: {
     marginBottom: 60,
     alignItems: 'center',
@@ -709,6 +703,21 @@ const styles = StyleSheet.create({
   dropdownMenuItemTextActive: {
     fontWeight: 'bold',
     color: '#A0522D',
+  },
+  // Background image styles
+  backgroundImageContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    height: '100%',
+    width: '150%', // Make the image wider than the screen
+    resizeMode: 'cover',
   },
 });
 

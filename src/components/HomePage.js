@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Animated, Easing, TouchableOpacity } from 'react-native';
+import { View, Text, Animated, Easing, TouchableOpacity, Image, Dimensions } from 'react-native';
 import styles from '../styles/styles';
 
 const HomePage = ({ setActiveSection }) => {
@@ -8,7 +8,53 @@ const HomePage = ({ setActiveSection }) => {
   const titleScale = useState(new Animated.Value(0.5))[0];
   const countdownOpacity = useState(new Animated.Value(0))[0];
   const pulseAnim = useState(new Animated.Value(1))[0];
+  const backgroundPosition = useState(new Animated.Value(0))[0];
   
+  // State to track window dimensions and animation direction
+  const [dimensions, setDimensions] = useState(Dimensions.get('window'));
+  const [shouldAnimate, setShouldAnimate] = useState(true);
+  const [isMovingRight, setIsMovingRight] = useState(true);
+
+  // Update dimensions when window resizes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      setDimensions(window);
+      // Check if image should animate based on new dimensions
+      const imageWidth = window.width * 1.5; // 150% of screen width
+      const imageHeight = window.height;
+      setShouldAnimate(imageWidth > window.width);
+    });
+
+    return () => subscription?.remove();
+  }, []);
+
+  // Background animation
+  useEffect(() => {
+    if (!shouldAnimate) {
+      backgroundPosition.setValue(0);
+      return;
+    }
+
+    const maxOffset = -dimensions.width * 0.5; // 50% of screen width (since image is 150% wide)
+
+    const animate = () => {
+      const toValue = isMovingRight ? maxOffset : 0;
+      
+      Animated.timing(backgroundPosition, {
+        toValue,
+        duration: 15000, // 15 seconds for each direction
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }).start(({ finished }) => {
+        if (finished) {
+          setIsMovingRight(!isMovingRight); // Reverse direction
+        }
+      });
+    };
+
+    animate();
+  }, [shouldAnimate, dimensions.width, isMovingRight]);
+
   // Set initial countdown values - July 16, 2025 at 11:30 AM CEST
   const [timeRemaining, setTimeRemaining] = useState({
     days: 175,
@@ -195,6 +241,20 @@ const HomePage = ({ setActiveSection }) => {
   
   return (
     <View style={styles.homePageContainer}>
+      <Animated.View style={styles.backgroundImageContainer}>
+        <Animated.Image
+          source={require('../background.png')}
+          style={[
+            styles.backgroundImage,
+            {
+              transform: [{
+                translateX: backgroundPosition
+              }]
+            }
+          ]}
+        />
+      </Animated.View>
+
       <Animated.View 
         style={[
           styles.titleContainer, 
