@@ -120,7 +120,7 @@ const Leaderboard = ({ participants, loading }) => {
   if (error) {
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Live Leaderboard</Text>
+        <Text style={styles.sectionTitle}>Live Resultat</Text>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Error: {error}</Text>
           <Text style={styles.errorSubtext}>Please check the console for details.</Text>
@@ -131,7 +131,7 @@ const Leaderboard = ({ participants, loading }) => {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Live Leaderboard</Text>
+      <Text style={styles.sectionTitle}>Live Resultat</Text>
       
       {/* View mode toggle */}
       <View style={styles.viewModeContainer}>
@@ -140,7 +140,7 @@ const Leaderboard = ({ participants, loading }) => {
           onPress={() => setViewMode('individual')}
         >
           <Text style={[styles.viewModeButtonText, viewMode === 'individual' && styles.viewModeButtonTextActive]}>
-            Individual
+            Individuellt
           </Text>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -148,7 +148,7 @@ const Leaderboard = ({ participants, loading }) => {
           onPress={() => setViewMode('team')}
         >
           <Text style={[styles.viewModeButtonText, viewMode === 'team' && styles.viewModeButtonTextActive]}>
-            Teams
+            Lag
           </Text>
         </TouchableOpacity>
       </View>
@@ -160,7 +160,7 @@ const Leaderboard = ({ participants, loading }) => {
           onPress={() => setActiveTab('total')}
         >
           <Text style={[styles.pickerButtonText, activeTab === 'total' && styles.pickerButtonTextActive]}>
-            Total Points
+            Total poäng
           </Text>
         </TouchableOpacity>
         
@@ -179,28 +179,28 @@ const Leaderboard = ({ participants, loading }) => {
       
       <View style={styles.leaderboardContainer}>
         <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 0.5 : 1 }]}>Rank</Text>
+          <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 0.5 : 1 }]}>Placering</Text>
           <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 2 : 3 }]}>
-            {viewMode === 'individual' ? 'Name' : 'Team'}
+            {viewMode === 'individual' ? 'Namn' : 'Lag'}
           </Text>
           {viewMode === 'individual' && (
-            <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Team</Text>
+            <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Lag</Text>
           )}
           <Text style={[styles.tableHeaderCell, { flex: smallScreen ? 1 : 2 }]}>
-            {activeTab === 'total' ? 'Points' : 'Game Points'}
+            {activeTab === 'total' ? 'Poäng' : 'Game Points'}
           </Text>
         </View>
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text style={styles.loadingText}>Loading participants...</Text>
-            <Text style={styles.loadingSubtext}>Check console for progress.</Text>
+            <Text style={styles.loadingText}>Laddar deltagare...</Text>
+            <Text style={styles.loadingSubtext}>Kolla konsolen för att se progress.</Text>
           </View>
         ) : (
           <ScrollView style={styles.tableBody}>
             {getSortedParticipants().length === 0 ? (
               <View style={styles.emptyStateContainer}>
-                <Text style={styles.emptyStateText}>No data found</Text>
+                <Text style={styles.emptyStateText}>Inga data hittades</Text>
               </View>
             ) : (
               getSortedParticipants().map((item, index) => (

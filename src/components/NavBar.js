@@ -37,11 +37,11 @@ const NavBar = ({ activeSection, setActiveSection, logoImage }) => {
 
   const renderNavLinks = () => {
     const links = [
-      { id: 'home', label: 'Home' },
-      { id: 'schedule', label: 'Schedule' },
-      { id: 'registration', label: 'Registration' },
-      { id: 'leaderboard', label: 'Leaderboard' },
-      { id: 'results', label: 'Results' }
+      { id: 'home', label: 'Hem' },
+      { id: 'schedule', label: 'Schema' },
+      { id: 'registration', label: 'Registrering' },
+      { id: 'leaderboard', label: 'Resultat' },
+      { id: 'results', label: 'Admin' }
     ];
 
     return links.map(link => (

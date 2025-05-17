@@ -65,10 +65,10 @@ const Results = ({ participants, updateScore, loading }) => {
   if (loading) {
     return (
       <View style={styles.section}> 
-        <Text style={styles.sectionTitle}>Register Results</Text>
+        <Text style={styles.sectionTitle}>Registrera resultat</Text>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Loading participants...</Text>
+          <Text style={styles.loadingText}>Laddar deltagare...</Text>
         </View>
       </View>
     );
@@ -76,11 +76,11 @@ const Results = ({ participants, updateScore, loading }) => {
 
   return (
     <View style={styles.section}> 
-      <Text style={styles.sectionTitle}>Register Results</Text>
+      <Text style={styles.sectionTitle}>Registrera resultat</Text>
       <View style={styles.formContainer}>
         {/* Native select dropdown for participant selection */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Select Participant:</Text>
+          <Text style={styles.label}>Välj deltagare:</Text>
           
           {/* Use native HTML select for better compatibility */}
           <select
@@ -103,7 +103,7 @@ const Results = ({ participants, updateScore, loading }) => {
             }}
             disabled={submitting}
           >
-            <option value="">Select a participant</option>
+            <option value="">Välj en deltagare</option>
             {participants.map((participant) => (
               <option key={participant.id} value={participant.id}>
                 {participant.name} ({participant.team})
@@ -114,7 +114,7 @@ const Results = ({ participants, updateScore, loading }) => {
         
         {/* Game selection */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Event:</Text>
+          <Text style={styles.label}>Game:</Text>
           <View style={styles.pickerContainer}> 
             {events.map(event => (
               <TouchableOpacity 
@@ -142,12 +142,12 @@ const Results = ({ participants, updateScore, loading }) => {
 
         {/* Points input */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Points Awarded:</Text>
+          <Text style={styles.label}>Resultat:</Text>
           <TextInput 
             style={styles.input} 
             value={points}
             onChangeText={setPoints}
-            placeholder="Enter points"
+            placeholder="Ange poäng"
             placeholderTextColor="#5D4037aa"
             keyboardType="number-pad"
             editable={!submitting}
@@ -164,7 +164,9 @@ const Results = ({ participants, updateScore, loading }) => {
           {submitting ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text style={styles.submitBtnText}>Submit Score</Text>
+            <Text style={styles.submitBtnText}>
+              Registrera resultat
+            </Text>
           )}
         </TouchableOpacity>
       </View>

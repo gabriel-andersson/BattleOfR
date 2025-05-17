@@ -216,14 +216,14 @@ const HomePage = ({ setActiveSection }) => {
             { opacity: countdownOpacity }
           ]}
         >
-          <Text style={styles.countdownHeader}>Event Starts In:</Text>
+          <Text style={styles.countdownHeader}>Brunket startar om:</Text>
           <View style={styles.countdownUnitsContainer}>
             {renderCountdownUnit(timeRemaining.days, 'DAYS')}
             {renderCountdownUnit(timeRemaining.hours, 'HOURS')}
             {renderCountdownUnit(timeRemaining.minutes, 'MINS')}
             {renderCountdownUnit(timeRemaining.seconds, 'SECS')}
           </View>
-          <Text style={styles.eventDate}>July 16, 2025 at 11:30 AM CEST</Text>
+          <Text style={styles.eventDate}>16 Juli 2025 kl 11:30 </Text>
         </Animated.View>
       )}
     </View>

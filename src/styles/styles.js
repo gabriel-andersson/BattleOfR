@@ -638,6 +638,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF8DC',
     borderColor: '#A0522D',
     borderWidth: 2,
+    zIndex: 9999,
+    overflow: 'visible'
   },
   dropdownTriggerText: {
     fontSize: 16,
