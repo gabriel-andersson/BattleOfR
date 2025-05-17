@@ -317,17 +317,32 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 15,
-    right: 15,
-    backgroundColor: '#A0522D', // Sienna
-    padding: 8,
+    top: 10,
+    right: 10,
+    backgroundColor: '#A0522D',
+    width: 30,
+    height: 30,
     borderRadius: 15,
-    zIndex: 2, // Ensure it's above other content
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+    cursor: 'pointer',
+    border: '2px solid #F5F5DC',
+    display: 'flex',
+    padding: 0,
   },
   closeButtonText: {
-    color: '#F5F5DC', // Beige
-    fontSize: 18,
+    color: '#F5F5DC',
+    fontSize: 16,
     fontWeight: 'bold',
+    lineHeight: '16px',
+    textAlign: 'center',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -2, // Fine-tune vertical alignment
   },
   eventImageContainer: {
     width: '100%',
