@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native';
 import styles, { isSmallScreen } from '../styles/styles';
+import EventModal from './EventModal';
 import golf_ö_image from '../images/golfö2.png'
 import golf_flagga from '../images/golf_2.jpg'
 import pilbåge_v1 from '../images/arrows2.png'
@@ -20,15 +21,13 @@ const Schedule = () => {
       setSmallScreen(window.width < 768);
     };
     
-    // Use Dimensions.addEventListener
     const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
     
-    // Return cleanup function
     return () => {
       subscription.remove();
     };
   }, []);
-  
+
   const scheduleItems = [
     { 
       time: '11:30', 
@@ -216,40 +215,10 @@ const Schedule = () => {
       </View>
 
       {selectedEvent && (
-        <View style={styles.eventDetailsModal}>
-          <View style={[
-            styles.eventDetailsContent,
-            smallScreen && styles.eventDetailsContentMobile
-          ]}>
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setSelectedEvent(null)}
-              hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }} // Expand touch area
-              activeOpacity={0.7} // Add touch feedback
-            >
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-            
-            <View style={styles.eventImageContainer}>
-              <Image 
-                source={{ uri: selectedEvent.image }} 
-                style={styles.eventImage}
-                resizeMode="cover"
-              />
-            </View>
-            
-            <View style={styles.eventDetailsContainer}>
-              <View style={styles.eventDetailsHeader}>
-                <Text style={styles.eventDetailsTitle}>{selectedEvent.event}</Text>
-                <Text style={styles.eventDetailsTime}>{selectedEvent.time}</Text>
-              </View>
-              
-              <ScrollView style={styles.eventDetailsScroll}>
-                <Text style={styles.eventDescription}>{selectedEvent.details}</Text>
-              </ScrollView>
-            </View>
-          </View>
-        </View>
+        <EventModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
       )}
     </View>
   );

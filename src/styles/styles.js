@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   eventDetailsModal: {
-    position: 'absolute',
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -301,6 +301,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
+    display: 'flex',
+    paddingTop: '10vh', // Add some padding from the top
+    paddingBottom: '10vh', // Add some padding from the bottom
   },
   eventDetailsContent: {
     backgroundColor: '#34495e', // Section-like background
@@ -308,7 +311,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: '90%',
     maxWidth: 500,
-    maxHeight: '80%',
+    maxHeight: '80vh', // Change to viewport height units
     position: 'relative',
     overflow: 'hidden',
   },
