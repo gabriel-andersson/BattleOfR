@@ -171,7 +171,7 @@ const Leaderboard = ({ participants, loading }) => {
             onPress={() => setActiveTab(event)}
           >
             <Text style={[styles.pickerButtonText, activeTab === event && styles.pickerButtonTextActive]}>
-              {event.split(':')[0]}
+              {event.split(':')[1]}
             </Text>
           </TouchableOpacity>
         ))}

@@ -10,6 +10,9 @@ import surf from '../images/surf1.png'
 import saw from '../images/saw.png'
 import elda_snöre from '../images/elda_snöre3.png'
 import spik from '../images/spik.png'
+import korv from '../images/korv.png'
+import grill from '../images/grill.png'
+import bastu from '../images/bastu.png'
 
 const Schedule = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -32,8 +35,8 @@ const Schedule = () => {
     { 
       time: '11:30', 
       event: 'Öppnings Cermoni',
-      details: 'Welcome to our Pentathlon Event! The opening ceremony will include speeches from organizers, introduction of teams, and a brief overview of today\'s events.',
-      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      details: 'Energiladdning inför dagen.  ',
+      image: korv,
       category: 'general'
     },
     { 
@@ -87,29 +90,18 @@ const Schedule = () => {
     },
     { 
       time: '17:00', 
-      event: 'Middag och Cermoni',
-      details: 'A celebratory dinner will be served at the main hall, featuring a variety of dishes to accommodate all dietary requirements. (Körv).',
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      category: 'general'
+      event: 'Äntligen mat',
+      details: 'Dagens aktiviteter avrundas framför grillen.',
+      image: grill,
+      category: 'Äntligen Vile'
+    },
+    { 
+      time: '18:30', 
+      event: 'Bada Bada B...',
+      details: 'Fram med björkriset och bastumössan.',
+      image: bastu,
+      category: 'Äntligen Vile'
     }
-    // { 
-    //   time: '12:00', 
-    //   event: 'Lunch Break',
-    //   details: 'A healthy lunch will be served at the main cafeteria. Vegetarian and vegan options are available.',
-    //   image: 'https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-    // },
-    // { 
-    //   time: '14:00', 
-    //   event: 'Event 2: Running',
-    //   details: '3000m cross-country running. The course will go through the park and surrounding areas. Water stations are available every 1km.',
-    //   image: 'https://images.unsplash.com/photo-1486218119243-13883505764c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-    // },
-    // { 
-    //   time: '16:00', 
-    //   event: 'Event 3: Cycling',
-    //   details: '10km cycling race on the city circuit. Helmets are mandatory. Participants must bring their own bikes or reserve one in advance.',
-    //   image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-    // },
   ];
   
   // Group schedule items by category
@@ -117,7 +109,8 @@ const Schedule = () => {
     general: scheduleItems.filter(item => item.category === 'general'),
     precision: scheduleItems.filter(item => item.category === 'precision'),
     brunk: scheduleItems.filter(item => item.category === 'brunk'),
-    överlevnad: scheduleItems.filter(item => item.category === 'överlevnad')
+    överlevnad: scheduleItems.filter(item => item.category === 'överlevnad'),
+    äntligen_vila: scheduleItems.filter(item => item.category === 'Äntligen Vile')
   };
 
   return (
@@ -125,6 +118,7 @@ const Schedule = () => {
       <Text style={styles.sectionTitle}>Vad händer under dagen?</Text>
       <View style={styles.scheduleContainer}>
         {/* General events (opening and closing ceremonies) */}
+        <Text style={styles.categoryTitle}>Farciminis</Text>
         {groupedScheduleItems.general.filter(item => item.time === '11:30').map((item, index) => (
           <TouchableOpacity 
             key={index} 
@@ -135,7 +129,7 @@ const Schedule = () => {
             <Text style={styles.scheduleTime}>{item.time}</Text>
             <View style={styles.scheduleContent}>
               <Text style={styles.scheduleEvent}>{item.event}</Text>
-              <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+              <Text style={styles.scheduleDetailsHint}>Klicka för info →</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -153,7 +147,7 @@ const Schedule = () => {
               <Text style={styles.scheduleTime}>{item.time}</Text>
               <View style={styles.scheduleContent}>
                 <Text style={styles.scheduleEvent}>{item.event}</Text>
-                <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+                <Text style={styles.scheduleDetailsHint}>Klicka för info →</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -172,7 +166,7 @@ const Schedule = () => {
               <Text style={styles.scheduleTime}>{item.time}</Text>
               <View style={styles.scheduleContent}>
                 <Text style={styles.scheduleEvent}>{item.event}</Text>
-                <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+                <Text style={styles.scheduleDetailsHint}>Klicka för info →</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -191,14 +185,16 @@ const Schedule = () => {
               <Text style={styles.scheduleTime}>{item.time}</Text>
               <View style={styles.scheduleContent}>
                 <Text style={styles.scheduleEvent}>{item.event}</Text>
-                <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+                <Text style={styles.scheduleDetailsHint}>Klicka för info →</Text>
               </View>
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Final ceremony */}
-        {groupedScheduleItems.general.filter(item => item.time === '17:00').map((item, index) => (
+        <View style={styles.categoryContainer}>
+          <Text style={styles.categoryTitle}>Post Ludos</Text>
+        {groupedScheduleItems.äntligen_vila.map((item, index) => (
           <TouchableOpacity 
             key={index} 
             style={styles.scheduleItem}
@@ -208,10 +204,11 @@ const Schedule = () => {
             <Text style={styles.scheduleTime}>{item.time}</Text>
             <View style={styles.scheduleContent}>
               <Text style={styles.scheduleEvent}>{item.event}</Text>
-              <Text style={styles.scheduleDetailsHint}>Tap for details →</Text>
+              <Text style={styles.scheduleDetailsHint}>Klicka för info →</Text>
             </View>
           </TouchableOpacity>
         ))}
+      </View>
       </View>
 
       {selectedEvent && (
