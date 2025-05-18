@@ -39,8 +39,8 @@ const NavBar = ({ activeSection, setActiveSection, logoImage }) => {
     const links = [
       { id: 'home', label: 'Hem' },
       { id: 'schedule', label: 'Schema' },
-      { id: 'registration', label: 'Registrering' },
       { id: 'leaderboard', label: 'Resultat' },
+      { id: 'registration', label: 'Registrering' },
       { id: 'results', label: 'Admin' }
     ];
 

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
-    minHeight: Dimensions.get('window').height * 0.95,
+    minHeight: Dimensions.get('window').height * 0.9,
     // minHeight: 1000,
     position: 'relative',
     overflow: 'hidden',
@@ -726,7 +726,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     position: 'absolute',
     height: '100%',
-    width: '140%', // Make the image wider than the screen
+    width: '150%', // Make the image wider than the screen
     resizeMode: 'cover',
   },
 });
