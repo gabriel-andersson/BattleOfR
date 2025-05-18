@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import styles from '../styles/styles';
+import PasswordPrompt from './PasswordPrompt';
 
 const Results = ({ participants, updateScore, loading }) => {
   const [selectedParticipantId, setSelectedParticipantId] = useState('');
   const [points, setPoints] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scoringMode, setScoringMode] = useState('individual'); // 'individual' or 'team'
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const events = [
       'Game 1: Elda snöre',
       'Game 2: Ö-golf', 
@@ -20,9 +22,21 @@ const Results = ({ participants, updateScore, loading }) => {
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
 
+  // Check for existing session authentication
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('isAdminAuthenticated');
+    if (isAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    sessionStorage.setItem('isAdminAuthenticated', 'true');
+  };
+
   // Get unique teams from participants
   const teams = [...new Set(participants.map(p => p.team))].filter(Boolean);
-
   const dropdownStyles = {
     trigger: {
       backgroundColor: '#F5F5DC',
@@ -132,6 +146,11 @@ const Results = ({ participants, updateScore, loading }) => {
       return participant ? `${participant.name} (${participant.team})` : 'Välj en deltagare';
     }
   };
+    // If not authenticated, show password prompt
+    if (!isAuthenticated) {
+      return <PasswordPrompt onSuccess={handleAuthSuccess} />;
+    }
+  
 
   if (loading) {
     return (
