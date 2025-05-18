@@ -14,7 +14,7 @@ import logoImage from './logo.png'; // Import your logo image
 import scenicBackgroundImage from './background.png'; // Import the scenic background image
 import styles, { isSmallScreen } from './styles/styles';
 import { db, resetFirestoreConnection, checkFirestoreConfig } from './firebase';
-import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, query, orderBy, getDoc, setDoc } from 'firebase/firestore';
 
 // Import components
 import NavBar from './components/NavBar';
@@ -220,60 +220,77 @@ const App = () => {
     }
   };
   
-  const updateScore = async (participantId, pointsToAdd, eventName) => {
+  const updateScore = async (id, pointsToAdd, eventName, scoringMode) => {
     try {
-      const participantRef = doc(db, 'participants', participantId);
-      const participant = participants.find(p => p.id === participantId);
-      
-      if (!participant) return;
-      
-      // Calculate new points and event scores
-      const currentPoints = participant.points || 0;
-      const newPoints = currentPoints + pointsToAdd;
-      const currentEventPoints = participant.events && participant.events[eventName] ? participant.events[eventName] : 0;
-      const newEventPoints = currentEventPoints + pointsToAdd;
-      
-      // Create events object if it doesn't exist
-      const events = participant.events || {};
-      events[eventName] = newEventPoints;
-      
-      // Update the document in Firestore
-      await updateDoc(participantRef, {
-        points: newPoints,
-        [`events.${eventName}`]: newEventPoints
-      });
-      
-      // Update local state
-      const updatedParticipants = participants.map(p => {
-        if (p.id === participantId) {
-          return { 
-            ...p, 
-            points: newPoints, 
-            events: events
-          };
+      if (scoringMode === 'individual') {
+        const participantRef = doc(db, 'participants', id);
+        const participant = participants.find(p => p.id === id);
+        
+        if (!participant) return;
+        
+        // Calculate new points and event scores
+        const currentPoints = participant.points || 0;
+        const newPoints = currentPoints + pointsToAdd;
+        const currentEventPoints = participant.events && participant.events[eventName] ? participant.events[eventName] : 0;
+        const newEventPoints = currentEventPoints + pointsToAdd;
+        
+        // Create events object if it doesn't exist
+        const events = participant.events || {};
+        events[eventName] = newEventPoints;
+        
+        // Update the document in Firestore
+        await updateDoc(participantRef, {
+          points: newPoints,
+          [`events.${eventName}`]: newEventPoints
+        });
+        
+        // Update local state
+        const updatedParticipants = participants.map(p => {
+          if (p.id === id) {
+            return { 
+              ...p, 
+              points: newPoints, 
+              events: events
+            };
+          }
+          return p;
+        });
+        
+        setParticipants(updatedParticipants);
+      } else {
+        // Handle team scoring
+        const teamRef = doc(db, 'teams', id);
+        
+        // Get current team data or create new team document
+        try {
+          const teamDoc = await getDoc(teamRef);
+          const currentTeamData = teamDoc.exists() ? teamDoc.data() : { name: id, points: 0, events: {} };
+          
+          // Calculate new points
+          const currentPoints = currentTeamData.points || 0;
+          const newPoints = currentPoints + pointsToAdd;
+          const currentEventPoints = currentTeamData.events && currentTeamData.events[eventName] ? currentTeamData.events[eventName] : 0;
+          const newEventPoints = currentEventPoints + pointsToAdd;
+          
+          // Update or create team document
+          await setDoc(teamRef, {
+            name: id,
+            points: newPoints,
+            events: {
+              ...currentTeamData.events,
+              [eventName]: newEventPoints
+            }
+          });
+          
+          alert(`Team score updated for ${id} in event: ${eventName}`);
+        } catch (error) {
+          console.error("Error updating team score:", error);
+          throw error;
         }
-        return p;
-      });
-      
-      setParticipants(updatedParticipants);
-      alert(`Score updated for event: ${eventName} successfully!`);
+      }
     } catch (error) {
       console.error("Error updating score:", error);
-      // Fallback to localStorage
-      const updatedParticipants = participants.map(p => {
-        if (p.id === participantId) {
-          const newEventScores = { ...(p.events || {}), [eventName]: ((p.events && p.events[eventName]) || 0) + pointsToAdd };
-          return { 
-            ...p, 
-            points: (p.points || 0) + pointsToAdd, 
-            events: newEventScores
-          };
-        }
-        return p;
-      });
-      setParticipants(updatedParticipants);
-      localStorage.setItem('participants', JSON.stringify(updatedParticipants));
-      alert(`Score updated for event: ${eventName} successfully!`);
+      throw error;
     }
   };
   

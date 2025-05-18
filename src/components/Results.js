@@ -6,6 +6,7 @@ const Results = ({ participants, updateScore, loading }) => {
   const [selectedParticipantId, setSelectedParticipantId] = useState('');
   const [points, setPoints] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [scoringMode, setScoringMode] = useState('individual'); // 'individual' or 'team'
   const events = [
       'Game 1: Elda snöre',
       'Game 2: Ö-golf', 
@@ -18,6 +19,9 @@ const Results = ({ participants, updateScore, loading }) => {
   ];
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
+
+  // Get unique teams from participants
+  const teams = [...new Set(participants.map(p => p.team))].filter(Boolean);
 
   const dropdownStyles = {
     trigger: {
@@ -69,12 +73,13 @@ const Results = ({ participants, updateScore, loading }) => {
   useEffect(() => {
     console.log("All participants:", participants);
     console.log("Selected participant ID:", selectedParticipantId);
+    console.log("Current scoring mode:", scoringMode);
     
     if (selectedParticipantId) {
       const selected = participants.find(p => p.id === selectedParticipantId);
       console.log("Found participant:", selected);
     }
-  }, [participants, selectedParticipantId]);
+  }, [participants, selectedParticipantId, scoringMode]);
 
   const handleSubmit = async () => {
     if (loading) {
@@ -85,7 +90,7 @@ const Results = ({ participants, updateScore, loading }) => {
     const pointsToAdd = parseInt(points, 10);
 
     if (!selectedParticipantId) {
-      alert('Please select a participant.');
+      alert('Please select a ' + (scoringMode === 'individual' ? 'participant' : 'team'));
       return;
     }
     if (isNaN(pointsToAdd)) {
@@ -99,7 +104,7 @@ const Results = ({ participants, updateScore, loading }) => {
 
     try {
       setSubmitting(true);
-      await updateScore(selectedParticipantId, pointsToAdd, selectedEvent);
+      await updateScore(selectedParticipantId, pointsToAdd, selectedEvent, scoringMode);
       setPoints('');
     } catch (error) {
       console.error("Error submitting score:", error);
@@ -119,8 +124,13 @@ const Results = ({ participants, updateScore, loading }) => {
   };
 
   const getSelectedParticipantName = () => {
-    const participant = participants.find(p => p.id === selectedParticipantId);
-    return participant ? `${participant.name} (${participant.team})` : 'Välj en deltagare';
+    if (scoringMode === 'team') {
+      const team = teams.find(t => t === selectedParticipantId);
+      return team || 'Välj ett lag';
+    } else {
+      const participant = participants.find(p => p.id === selectedParticipantId);
+      return participant ? `${participant.name} (${participant.team})` : 'Välj en deltagare';
+    }
   };
 
   if (loading) {
@@ -138,9 +148,36 @@ const Results = ({ participants, updateScore, loading }) => {
   return (
     <View style={styles.section}> 
       <Text style={styles.sectionTitle}>Registrera resultat</Text>
+      
+      {/* Scoring mode toggle */}
+      <View style={styles.viewModeContainer}>
+        <TouchableOpacity 
+          style={[styles.viewModeButton, scoringMode === 'individual' && styles.viewModeButtonActive]}
+          onPress={() => {
+            setScoringMode('individual');
+            setSelectedParticipantId('');
+          }}
+        >
+          <Text style={[styles.viewModeButtonText, scoringMode === 'individual' && styles.viewModeButtonTextActive]}>
+            Individuellt
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.viewModeButton, scoringMode === 'team' && styles.viewModeButtonActive]}
+          onPress={() => {
+            setScoringMode('team');
+            setSelectedParticipantId('');
+          }}
+        >
+          <Text style={[styles.viewModeButtonText, scoringMode === 'team' && styles.viewModeButtonTextActive]}>
+            Lag
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.formContainer}>
         <View style={[styles.formGroup, { zIndex: 3 }]}>
-          <Text style={styles.label}>Välj deltagare:</Text>
+          <Text style={styles.label}>{scoringMode === 'individual' ? 'Välj deltagare:' : 'Välj lag:'}</Text>
           <View style={[styles.dropdownContainer, { zIndex: 1000 }]}>
             <TouchableOpacity 
               style={[dropdownStyles.trigger, dropdownOpen && dropdownStyles.menuItemActive]} 
@@ -168,26 +205,49 @@ const Results = ({ participants, updateScore, loading }) => {
                   nestedScrollEnabled={true}
                   keyboardShouldPersistTaps="handled"
                 >
-                  {participants.map((participant, index) => (
-                    <TouchableOpacity
-                      key={participant.id}
-                      style={[
-                        dropdownStyles.menuItem,
-                        selectedParticipantId === participant.id && dropdownStyles.menuItemActive,
-                        index === participants.length - 1 && { borderBottomWidth: 0 }
-                      ]}
-                      onPress={() => selectParticipant(participant.id)}
-                    >
-                      <Text 
+                  {scoringMode === 'individual' ? (
+                    participants.map((participant, index) => (
+                      <TouchableOpacity
+                        key={participant.id}
                         style={[
-                          dropdownStyles.menuItemText,
-                          selectedParticipantId === participant.id && dropdownStyles.menuItemTextActive
+                          dropdownStyles.menuItem,
+                          selectedParticipantId === participant.id && dropdownStyles.menuItemActive,
+                          index === participants.length - 1 && { borderBottomWidth: 0 }
                         ]}
+                        onPress={() => selectParticipant(participant.id)}
                       >
-                        {participant.name} ({participant.team})
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                        <Text 
+                          style={[
+                            dropdownStyles.menuItemText,
+                            selectedParticipantId === participant.id && dropdownStyles.menuItemTextActive
+                          ]}
+                        >
+                          {participant.name} ({participant.team})
+                        </Text>
+                      </TouchableOpacity>
+                    ))
+                  ) : (
+                    teams.map((team, index) => (
+                      <TouchableOpacity
+                        key={team}
+                        style={[
+                          dropdownStyles.menuItem,
+                          selectedParticipantId === team && dropdownStyles.menuItemActive,
+                          index === teams.length - 1 && { borderBottomWidth: 0 }
+                        ]}
+                        onPress={() => selectParticipant(team)}
+                      >
+                        <Text 
+                          style={[
+                            dropdownStyles.menuItemText,
+                            selectedParticipantId === team && dropdownStyles.menuItemTextActive
+                          ]}
+                        >
+                          {team}
+                        </Text>
+                      </TouchableOpacity>
+                    ))
+                  )}
                 </ScrollView>
               </View>
             )}

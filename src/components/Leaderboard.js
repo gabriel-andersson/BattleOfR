@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import styles, { isSmallScreen } from '../styles/styles';
+import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Leaderboard = ({ participants, loading }) => {
   const [smallScreen, setSmallScreen] = useState(isSmallScreen());
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('total');
-  const [viewMode, setViewMode] = useState('individual'); // 'individual' or 'team'
+  const [viewMode, setViewMode] = useState('individual');
+  const [teams, setTeams] = useState([]);
+  const [loadingTeams, setLoadingTeams] = useState(true);
   
   // Define game events
   const gameEvents = [
@@ -20,28 +24,49 @@ const Leaderboard = ({ participants, loading }) => {
     'Game 8: Såga stock',
   ];
   
+  // Fetch team data
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        setLoadingTeams(true);
+        const teamsRef = collection(db, 'teams');
+        const teamsSnapshot = await getDocs(teamsRef);
+        const teamsData = teamsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setTeams(teamsData);
+      } catch (err) {
+        console.error("Error fetching teams:", err);
+        setError("Error loading team data");
+      } finally {
+        setLoadingTeams(false);
+      }
+    };
+
+    fetchTeams();
+  }, []);
+
   // Handle screen resize
   useEffect(() => {
     const handleDimensionsChange = ({ window }) => {
       setSmallScreen(window.width < 768);
     };
     
-    // Use Dimensions.addEventListener
     const subscription = Dimensions.addEventListener('change', handleDimensionsChange);
     
-    // Return cleanup function
     return () => {
       subscription.remove();
     };
   }, []);
 
-  // For debugging - check if data is available
+  // For debugging
   useEffect(() => {
     console.log("Leaderboard component - participants:", participants);
-    console.log("Leaderboard component - loading state:", loading);
+    console.log("Leaderboard component - teams:", teams);
+    console.log("Leaderboard component - loading states:", { participants: loading, teams: loadingTeams });
     
     try {
-      // Validate that participants is an array
       if (participants && !Array.isArray(participants)) {
         setError("Participants data is not in the expected format");
         console.error("Participants data is not an array:", participants);
@@ -49,48 +74,13 @@ const Leaderboard = ({ participants, loading }) => {
         setError(null);
       }
     } catch (err) {
-      setError("Error processing participants data");
+      setError("Error processing data");
       console.error("Error in Leaderboard component:", err);
     }
-  }, [participants, loading]);
-
-  // Get team data by aggregating individual scores
-  const getTeamData = () => {
-    if (!participants || participants.length === 0) return [];
-    
-    const teams = {};
-    
-    participants.forEach(participant => {
-      const teamName = participant.team;
-      if (!teamName) return;
-      
-      if (!teams[teamName]) {
-        teams[teamName] = {
-          name: teamName,
-          points: 0,
-          events: {}
-        };
-      }
-      
-      // Add total points
-      teams[teamName].points += participant.points || 0;
-      
-      // Add event-specific points
-      if (participant.events) {
-        Object.entries(participant.events).forEach(([eventName, points]) => {
-          if (!teams[teamName].events[eventName]) {
-            teams[teamName].events[eventName] = 0;
-          }
-          teams[teamName].events[eventName] += points;
-        });
-      }
-    });
-    
-    return Object.values(teams);
-  };
+  }, [participants, teams, loading, loadingTeams]);
 
   // Sort participants or teams for the selected game or by total points
-  const getSortedParticipants = () => {
+  const getSortedData = () => {
     if (viewMode === 'individual') {
       if (!participants || participants.length === 0) return [];
       
@@ -104,12 +94,12 @@ const Leaderboard = ({ participants, loading }) => {
         });
       }
     } else { // Team view
-      const teamData = getTeamData();
+      if (!teams || teams.length === 0) return [];
       
       if (activeTab === 'total') {
-        return teamData.sort((a, b) => b.points - a.points);
+        return [...teams].sort((a, b) => b.points - a.points);
       } else {
-        return teamData.sort((a, b) => {
+        return [...teams].sort((a, b) => {
           const aPoints = a.events && a.events[activeTab] ? a.events[activeTab] : 0;
           const bPoints = b.events && b.events[activeTab] ? b.events[activeTab] : 0;
           return bPoints - aPoints;
@@ -191,21 +181,20 @@ const Leaderboard = ({ participants, loading }) => {
             {activeTab === 'total' ? 'Poäng' : 'Game Points'}
           </Text>
         </View>
-        {loading ? (
+        {(loading && viewMode === 'individual') || (loadingTeams && viewMode === 'team') ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text style={styles.loadingText}>Laddar deltagare...</Text>
-            <Text style={styles.loadingSubtext}>Kolla konsolen för att se progress.</Text>
+            <Text style={styles.loadingText}>Laddar data...</Text>
           </View>
         ) : (
           <ScrollView style={styles.tableBody}>
-            {getSortedParticipants().length === 0 ? (
+            {getSortedData().length === 0 ? (
               <View style={styles.emptyStateContainer}>
                 <Text style={styles.emptyStateText}>Inga data hittades</Text>
               </View>
             ) : (
-              getSortedParticipants().map((item, index) => (
-                <View key={viewMode === 'individual' ? item.id : item.name} style={styles.tableRow}>
+              getSortedData().map((item, index) => (
+                <View key={item.id || item.name} style={styles.tableRow}>
                   <Text style={[styles.tableCell, { flex: smallScreen ? 0.5 : 1 }]}>{index + 1}</Text>
                   <Text style={[styles.tableCell, { flex: smallScreen ? 2 : 3 }]}>{item.name}</Text>
                   {viewMode === 'individual' && (
