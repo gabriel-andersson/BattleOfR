@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView 
 import styles from '../styles/styles';
 import PasswordPrompt from './PasswordPrompt';
 
-const Results = ({ participants, updateScore, loading }) => {
+const Results = ({ participants, updateScore, loading, onRefresh }) => {
   const [selectedParticipantId, setSelectedParticipantId] = useState('');
   const [points, setPoints] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -166,7 +166,16 @@ const Results = ({ participants, updateScore, loading }) => {
 
   return (
     <View style={styles.section}> 
-      <Text style={styles.sectionTitle}>Registrera resultat</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.sectionTitle}>Registrera resultat</Text>
+        <TouchableOpacity 
+          style={styles.refreshButton}
+          onPress={onRefresh}
+          disabled={loading}
+        >
+          <Text style={styles.refreshButtonText}>↻ Uppdatera</Text>
+        </TouchableOpacity>
+      </View>
       
       {/* Scoring mode toggle */}
       <View style={styles.viewModeContainer}>

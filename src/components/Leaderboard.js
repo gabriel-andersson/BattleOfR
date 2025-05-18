@@ -4,7 +4,7 @@ import styles, { isSmallScreen } from '../styles/styles';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-const Leaderboard = ({ participants, loading }) => {
+const Leaderboard = ({ participants, loading, onRefresh }) => {
   const [smallScreen, setSmallScreen] = useState(isSmallScreen());
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('total');
@@ -122,7 +122,16 @@ const Leaderboard = ({ participants, loading }) => {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Live Resultat</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.sectionTitle}>Live Resultat</Text>
+        <TouchableOpacity 
+          style={styles.refreshButton}
+          onPress={onRefresh}
+          disabled={loading || loadingTeams}
+        >
+          <Text style={styles.refreshButtonText}>↻ Uppdatera</Text>
+        </TouchableOpacity>
+      </View>
       
       {/* View mode toggle */}
       <View style={styles.viewModeContainer}>

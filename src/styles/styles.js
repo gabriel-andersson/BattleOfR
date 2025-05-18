@@ -238,11 +238,28 @@ const styles = StyleSheet.create({
     padding: Dimensions.get('window').width < 768 ? 16 : 24,
   },
   sectionTitle: {
-    fontSize: Dimensions.get('window').width < 768 ? 24 : 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: Dimensions.get('window').width < 768 ? 16 : 25,
+    color: '#5D4037',
+    marginBottom: 20,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  refreshButton: {
+    backgroundColor: '#793D23',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 6,
+    opacity: 1,
+  },
+  refreshButtonText: {
     color: '#F5F5DC',
-    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   // Schedule styles
   scheduleContainer: {
