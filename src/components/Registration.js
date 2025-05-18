@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import styles from '../styles/styles';
+import PasswordPrompt from './PasswordPrompt';
 
 const Registration = ({ addParticipant }) => {
   const [name, setName] = useState('');
@@ -8,14 +9,27 @@ const Registration = ({ addParticipant }) => {
   const [team, setTeam] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // Four hardcoded teams
   const teams = [
     'Team Rossö',
     'Team Strömstad',
     'Team Skee',
-    'Team Tjärnö'
   ];
+  
+  // Check for existing session authentication
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('isAdminAuthenticated');
+    if (isAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    sessionStorage.setItem('isAdminAuthenticated', 'true');
+  };
   
   const handleSubmit = async () => {
     if (name && team) {
@@ -46,6 +60,11 @@ const Registration = ({ addParticipant }) => {
     setTeam(selectedTeam);
     setDropdownOpen(false);
   };
+
+  // If not authenticated, show password prompt
+  if (!isAuthenticated) {
+    return <PasswordPrompt onSuccess={handleAuthSuccess} />;
+  }
 
   const dropdownStyles = {
     trigger: {

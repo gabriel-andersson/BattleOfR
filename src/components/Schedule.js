@@ -42,56 +42,56 @@ const Schedule = () => {
     },
     { 
       time: '12:30', 
-      event: 'Game 1: Elda snöre',
+      event: 'Elda snöre',
       details: 'Få upp eld med tändstål, elda av snöret så snabbt som möjligt.  ',
       image: elda_snöre,
       category: 'överlevnad'
     },
     { 
       time: '13:00', 
-      event: 'Game 2: Ö-golf',
+      event: 'Ö-golf',
       details: 'Ett slag, ett mål: en ö. Kom inte törstig för här vill du undvika vatten. Öl tillhandahålls som hjälpmedel. Poäng ges för att landa bollen på ön.',
       image: golf_ö_image,
       category: 'precision'
     },
     { 
       time: '13:30', 
-      event: 'Game 3: Närmast flaggan',
+      event: 'Närmast flaggan',
       details: 'En klassiker. Slå ett slag, kom närmast flaggan. Inga puttar, inga greener',
       image: golf_flagga,
       category: 'precision'
     },
     { 
       time: '14:00', 
-      event: 'Game 4: Pilbågsskytte',
+      event: 'Pilbågsskytte',
       details: 'Klassiskt pilbågsskytte mot tavla.  ',
       image: pilbåge_v1,
       category: 'precision'
     },
     { 
       time: '14:30', 
-      event: 'Game 5: Puzzel',
+      event: 'Pussel',
       details: 'Här kommer ett fantastiskt motiv att sättas ihop. Speciellt efterfrågad av J.O.',
       image: puzzle,
       category: 'precision'
     },  
     { 
       time: '15:00', 
-      event: 'Game 6: Skrotholmen Surf',
+      event: 'Skrotholmen Surf',
       details: 'Över vattnet, bygga torn, tillbaka.',
       image: surf,
       category: 'brunk'
     },
     { 
       time: '15:30', 
-      event: 'Game 7: Spika spik',
+      event: 'Spika spik',
       details: 'Hammare, spik.... ',
       image: spik,
       category: 'brunk'
     },
     { 
       time: '16:00', 
-      event: 'Game 8: Såga stock',
+      event: 'Såga stock',
       details: 'Nu kommer äntligen fogsvansen fram.',
       image: saw,
       category: 'brunk'
