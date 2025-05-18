@@ -18,7 +18,16 @@ const baseSectionStyle = {
 
 const styles = StyleSheet.create({
   // Home Page styles
-    homePageContainer: {    flex: 1,    justifyContent: 'center',    alignItems: 'center',    padding: 20,    minHeight: 600,    position: 'relative',    overflow: 'hidden',  },
+  homePageContainer: {    
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    minHeight: Dimensions.get('window').height * 0.95,
+    // minHeight: 1000,
+    position: 'relative',
+    overflow: 'hidden',
+  },
   titleContainer: {
     marginBottom: 60,
     alignItems: 'center',
@@ -717,7 +726,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     position: 'absolute',
     height: '100%',
-    width: '150%', // Make the image wider than the screen
+    width: '140%', // Make the image wider than the screen
     resizeMode: 'cover',
   },
 });
