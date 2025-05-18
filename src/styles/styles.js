@@ -238,10 +238,10 @@ const styles = StyleSheet.create({
     padding: Dimensions.get('window').width < 768 ? 16 : 24,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: Dimensions.get('window').width < 768 ? 24 : 28,
     fontWeight: 'bold',
-    color: '#5D4037',
-    marginBottom: 20,
+    color: '#F5F5DC',
+    marginBottom: Dimensions.get('window').width < 768 ? 16 : 25,
   },
   headerContainer: {
     flexDirection: 'row',

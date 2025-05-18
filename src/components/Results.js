@@ -168,13 +168,6 @@ const Results = ({ participants, updateScore, loading, onRefresh }) => {
     <View style={styles.section}> 
       <View style={styles.headerContainer}>
         <Text style={styles.sectionTitle}>Registrera resultat</Text>
-        <TouchableOpacity 
-          style={styles.refreshButton}
-          onPress={onRefresh}
-          disabled={loading}
-        >
-          <Text style={styles.refreshButtonText}>↻ Uppdatera</Text>
-        </TouchableOpacity>
       </View>
       
       {/* Scoring mode toggle */}
