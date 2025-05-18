@@ -7,13 +7,14 @@ const Results = ({ participants, updateScore, loading }) => {
   const [points, setPoints] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const events = [
-      'Game 1: Ö-golf', 
-      'Game 2: Närmast flaggan', 
-      'Game 3: Pilbågsskytte',
-      'Game 4: Skrotholmen Surf', 
-      'Game 5: Spika spik', 
-      'Game 6: Såga stock',
-      'Game 7: Elda snöre',
+      'Game 1: Elda snöre',
+      'Game 2: Ö-golf', 
+      'Game 3: Närmast flaggan', 
+      'Game 4: Pilbågsskytte',
+      'Game 5: Puzzel',
+      'Game 6: Skrotholmen Surf', 
+      'Game 7: Spika spik', 
+      'Game 8: Såga stock',
   ];
   const [selectedEvent, setSelectedEvent] = useState(events[0]);
   const [submitting, setSubmitting] = useState(false);
