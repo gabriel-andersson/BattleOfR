@@ -1,27 +1,28 @@
 {
   "files": {
     "main.css": "/BattleOfR/static/css/main.0c1769c2.css",
-    "main.js": "/BattleOfR/static/js/main.2bd0005f.js",
+    "main.js": "/BattleOfR/static/js/main.35485ec7.js",
     "static/js/453.2fd4d4a3.chunk.js": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js",
     "static/media/spik.png": "/BattleOfR/static/media/spik.7867aa301f0ec5a08264.png",
+    "static/media/grill1.png": "/BattleOfR/static/media/grill1.d6ce983544df2b690ffe.png",
     "static/media/korv.png": "/BattleOfR/static/media/korv.f3ea70593566fbabfec0.png",
+    "static/media/surf.png": "/BattleOfR/static/media/surf.5899d911469e083b8deb.png",
     "static/media/background.png": "/BattleOfR/static/media/background.c863667de79f7d106656.png",
-    "static/media/grill.png": "/BattleOfR/static/media/grill.83d5b80bceec097e46de.png",
+    "static/media/puzzle.png": "/BattleOfR/static/media/puzzle.6ad61794ec2d1a789299.png",
     "static/media/logo.png": "/BattleOfR/static/media/logo.aed0a9e4e9025b3aba26.png",
-    "static/media/surf1.png": "/BattleOfR/static/media/surf1.78bf7a5357b561a3f68a.png",
+    "static/media/elda_snöre16-9.png": "/BattleOfR/static/media/elda_snöre16-9.b42bed6888b74569258b.png",
+    "static/media/golfö.png": "/BattleOfR/static/media/golfö.0aeea56dde18b4c3cb4b.png",
     "static/media/saw.png": "/BattleOfR/static/media/saw.17d3841941a01e1ae53c.png",
-    "static/media/elda_snöre3.png": "/BattleOfR/static/media/elda_snöre3.784bcf8e095d0eeb7cd1.png",
     "static/media/arrows2.png": "/BattleOfR/static/media/arrows2.e8b8ab2dc56e8080ee94.png",
     "static/media/bastu.png": "/BattleOfR/static/media/bastu.3c17fffc09d1ac4c9f39.png",
-    "static/media/golfö2.png": "/BattleOfR/static/media/golfö2.c9f933d917bc2bb8df3c.png",
     "static/media/golf_2.jpg": "/BattleOfR/static/media/golf_2.f3be3f064dbe264ffe01.jpg",
     "index.html": "/BattleOfR/index.html",
     "main.0c1769c2.css.map": "/BattleOfR/static/css/main.0c1769c2.css.map",
-    "main.2bd0005f.js.map": "/BattleOfR/static/js/main.2bd0005f.js.map",
+    "main.35485ec7.js.map": "/BattleOfR/static/js/main.35485ec7.js.map",
     "453.2fd4d4a3.chunk.js.map": "/BattleOfR/static/js/453.2fd4d4a3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0c1769c2.css",
-    "static/js/main.2bd0005f.js"
+    "static/js/main.35485ec7.js"
   ]
 }
