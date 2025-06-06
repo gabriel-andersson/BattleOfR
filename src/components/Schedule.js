@@ -50,21 +50,21 @@ const Schedule = () => {
     { 
       time: '13:00', 
       event: 'Ö-golf',
-      details: 'Ett slag, ett mål: en ö. Kom inte törstig för här vill du undvika vatten. Öl tillhandahålls som hjälpmedel. Poäng ges för att landa bollen på ön.',
+      details: 'Kom inte törstig för här vill du undvika vatten. Öl tillhandahålls som hjälpmedel. Poäng ges för att landa bollen på ön.',
       image: golf_ö_image,
       category: 'precision'
     },
     { 
       time: '13:30', 
       event: 'Närmast flaggan',
-      details: 'En klassiker. Slå ett slag, kom närmast flaggan. Inga puttar, inga greener',
+      details: 'Inga krussiduller. Slå ett slag, kom närmast flaggan.',
       image: golf_flagga,
       category: 'precision'
     },
     { 
       time: '14:00', 
       event: 'Pilbågsskytte',
-      details: 'Klassiskt pilbågsskytte mot tavla.  ',
+      details: 'Klassiskt pilbågsskytte mot tavla.',
       image: pilbåge_v1,
       category: 'precision'
     },
@@ -78,7 +78,7 @@ const Schedule = () => {
     { 
       time: '15:00', 
       event: 'Skrotholmen Surf',
-      details: 'Över vattnet, bygga torn, tillbaka.',
+      details: 'Över vattnet, bygg tornet, tillbaka.',
       image: surf,
       category: 'brunk'
     },
@@ -98,17 +98,17 @@ const Schedule = () => {
     },
     { 
       time: '17:00', 
-      event: 'Äntligen mat',
+      event: 'Mat',
       details: 'Dagens aktiviteter avrundas framför grillen.',
       image: grill,
-      category: 'Äntligen Vile'
+      category: 'postludos'
     },
     { 
       time: '18:30', 
       event: 'Bada Bada B...',
       details: 'Fram med björkriset och bastumössan.',
       image: bastu,
-      category: 'Äntligen Vile'
+      category: 'postludos'
     }
   ];
   
@@ -118,7 +118,7 @@ const Schedule = () => {
     precision: scheduleItems.filter(item => item.category === 'precision'),
     brunk: scheduleItems.filter(item => item.category === 'brunk'),
     överlevnad: scheduleItems.filter(item => item.category === 'överlevnad'),
-    äntligen_vila: scheduleItems.filter(item => item.category === 'Äntligen Vile')
+    postludos: scheduleItems.filter(item => item.category === 'postludos')
   };
 
   return (

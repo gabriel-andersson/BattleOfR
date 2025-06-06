@@ -283,7 +283,7 @@ const HomePage = ({ setActiveSection }) => {
             { opacity: countdownOpacity }
           ]}
         >
-          <Text style={styles.countdownHeader}>Brunk startar om:</Text>
+          <Text style={styles.countdownHeader}>Startar om:</Text>
           <View style={styles.countdownUnitsContainer}>
             {renderCountdownUnit(timeRemaining.days, 'DAYS')}
             {renderCountdownUnit(timeRemaining.hours, 'HOURS')}
