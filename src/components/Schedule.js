@@ -202,7 +202,7 @@ const Schedule = () => {
         {/* Final ceremony */}
         <View style={styles.categoryContainer}>
           <Text style={styles.categoryTitle}>Post Ludos</Text>
-        {groupedScheduleItems.äntligen_vila.map((item, index) => (
+        {groupedScheduleItems.postludos.map((item, index) => (
           <TouchableOpacity 
             key={index} 
             style={styles.scheduleItem}
