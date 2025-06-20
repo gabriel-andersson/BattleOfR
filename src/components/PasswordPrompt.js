@@ -4,7 +4,7 @@ import styles from '../styles/styles';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-const PasswordPrompt = ({ onSuccess }) => {
+const PasswordPrompt = ({ onSuccess, didYouRealyThinkSomeoneWouldUseThisPassword  }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -15,7 +15,11 @@ const PasswordPrompt = ({ onSuccess }) => {
     
     try {
       const adminDoc = await getDoc(doc(db, 'admin', 'admin'));
-      if (adminDoc.exists() && adminDoc.data().password === password) {
+      if (password === "hadetgötthej") {
+        didYouRealyThinkSomeoneWouldUseThisPassword();
+        setError('Incorrect password')
+      }
+      else if (adminDoc.exists() && adminDoc.data().password === password) {
         onSuccess();
       } else {
         setError('Incorrect password');
@@ -30,15 +34,15 @@ const PasswordPrompt = ({ onSuccess }) => {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Admin Access Required</Text>
+      <Text style={styles.sectionTitle}>Här krävs admin access</Text>
       <View style={styles.formContainer}>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Enter admin password:</Text>
+          <Text style={styles.label}>Ange admin lösenord:</Text>
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            placeholder="Password"
+            placeholder="hadetgötthej"
             placeholderTextColor="#5D4037aa"
             secureTextEntry
             editable={!loading}

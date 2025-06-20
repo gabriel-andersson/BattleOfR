@@ -10,6 +10,7 @@ const Registration = ({ addParticipant }) => {
   const [submitting, setSubmitting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isStupid, setIsStupid] = useState(false);
   
   // Four hardcoded teams
   const teams = [
@@ -26,9 +27,13 @@ const Registration = ({ addParticipant }) => {
     }
   }, []);
 
-  const handleAuthSuccess = () => {
+  const handleAuthSuccess  = () => {
     setIsAuthenticated(true);
     sessionStorage.setItem('isAdminAuthenticated', 'true');
+  };
+  const didYouRealyThinkSomeoneWouldUseThisPassword  = () => {
+    setIsAuthenticated(false);
+    setIsStupid(true);
   };
   
   const handleSubmit = async () => {
@@ -60,10 +65,24 @@ const Registration = ({ addParticipant }) => {
     setTeam(selectedTeam);
     setDropdownOpen(false);
   };
+   if (isStupid) {
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Trodde du verkligen det..</Text>
+        <Text style={styles.errorText}>Inte mer än rätt att minuspoäng till laget har tilldelats</Text>
+        <TouchableOpacity 
+          style={styles.submitBtn} 
+          onPress={() => setIsStupid(false)}
+          activeOpacity={0.7}
+        >
+        </TouchableOpacity>  
+      </View>
+    );
+  }
 
   // If not authenticated, show password prompt
   if (!isAuthenticated) {
-    return <PasswordPrompt onSuccess={handleAuthSuccess} />;
+    return <PasswordPrompt onSuccess={handleAuthSuccess} didYouRealyThinkSomeoneWouldUseThisPassword={didYouRealyThinkSomeoneWouldUseThisPassword}  />;
   }
 
   const dropdownStyles = {

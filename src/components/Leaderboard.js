@@ -120,6 +120,19 @@ const Leaderboard = ({ participants, loading, onRefresh }) => {
     );
   }
 
+  if (true) { // temporary before teams are fixed!!!
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Håll i hatten.</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.categoryTitle}>Här inväntas lagindelning innan någon resultatvy visas.</Text>
+          {/* <Text style={styles.errorSubtext}>Please check the console for details.</Text> */}
+        </View>
+      </View>
+    );
+  }
+
+
   return (
     <View style={styles.section}>
       <View style={styles.headerContainer}>
